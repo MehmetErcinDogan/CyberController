@@ -1,0 +1,9 @@
+List devices
+Açık port tarama
+İş listesi pano
+Login screen
+Paket okuma sniffer
+DDOS
+Encyription file /Decyrption
+
+
