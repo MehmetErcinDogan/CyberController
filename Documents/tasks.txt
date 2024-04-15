@@ -1,9 +1,10 @@
-List devices
-Açık port tarama
-İş listesi pano
+List LAN Devices
+Port Scanner
+Packet Tracker
+Task List
 Login screen
-Paket okuma sniffer
-DDOS
-Encyription file /Decyrption
+Sniffer
+DDOS Attack
+Encyript/Decyrpt File
 
 
