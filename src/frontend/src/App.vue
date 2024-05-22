@@ -26,15 +26,16 @@ export default {
   },
   created: function(){
     console.log("Starting connection to WebSocket Server");
-    this.connection = new WebSocket("wss://echo.websocket.org");
+    this.connection = new WebSocket("ws://localhost:5000");
 
     this.connection.onopen = function(event){
       console.log(event);
       console.log("Sucessfully connected to the echo WebSocket Server");
     }
 
-    this.onmessage = function(event){
+    this.connection.onmessage = function(event){
       console.log(event);
+      console.log(event.data);
       console.log("message recieved");
     }
   }
