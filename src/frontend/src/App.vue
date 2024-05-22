@@ -1,5 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
+  <button v-on:click = "sendMessage('Hello World')">Send Message</button>
   <HelloWorld msg="Welcome to Your Vue.js App"/>
 </template>
 
@@ -10,6 +11,32 @@ export default {
   name: 'App',
   components: {
     HelloWorld
+  },
+  data: function(){
+    return{
+      connection: null
+    }
+  },
+  methods:{
+    sendMessage: function(message){
+      console.log(this.connection);
+      this.connection.send(message);
+      console.log("message sent");
+    }
+  },
+  created: function(){
+    console.log("Starting connection to WebSocket Server");
+    this.connection = new WebSocket("wss://echo.websocket.org");
+
+    this.connection.onopen = function(event){
+      console.log(event);
+      console.log("Sucessfully connected to the echo WebSocket Server");
+    }
+
+    this.onmessage = function(event){
+      console.log(event);
+      console.log("message recieved");
+    }
   }
 }
 </script>
