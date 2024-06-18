@@ -88,6 +88,8 @@ onMounted(() => {
 // TO DO: localStorage sıfırlanması gerekli her sayfa açıldığında app vueda başlangıçta sıfırlasın. App vue refresh edildiğinde bir daha çağrılmıyor zaten değil mi?
 // Check: Testere müziği sadece login sayfasında çalsın onun haricinde çalmasın. 
 // TO DO: Tüm gereksiz yorumları fonksiyonları kaldır ve daha açık hale getir bro
+// TO DO: Ben biraz değişiklik yaptım, viewlerın hepsinin çalışıp çalışmadığını da bir zahmet kontrol et bro
+
 
 // // Login related functions and variables
 // const loginBgColor = ref('#57B846');
