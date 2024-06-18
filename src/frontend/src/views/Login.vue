@@ -83,20 +83,25 @@ onMounted(() => {
   });
 });
 
-// Login related functions and variables
-const loginBgColor = ref('#57B846');
-const loginColor = ref('#fff');
+// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol
+// TO DO: onBeforeMount fonksitonu bir kere mi çalışıyor ve neden onMounted içinde tanımlanmış? O fonksiyonda başka işlevlerde olacak
+// TO DO: localStorage sıfırlanması gerekli her sayfa açıldığında app vueda başlangıçta sıfırlasın. App vue refresh edildiğinde bir daha çağrılmıyor zaten değil mi?
+// Check: Testere müziği sadece login sayfasında çalsın onun haricinde çalmasın. 
+// TO DO: Tüm gereksiz yorumları fonksiyonları kaldır ve daha açık hale getir bro
+
+// // Login related functions and variables
+// const loginBgColor = ref('#57B846');
+// const loginColor = ref('#fff');
 const showLoginForm = ref(true);
-const progressOpacity = ref(0);
-const intervalId = ref(null);
+// const progressOpacity = ref(0);
+// const intervalId = ref(null);
 
 const handleLogin = async () => {
-  startProgress();
   const isValid = await validateUsernameAndPassword();
   if (isValid) {
     setTimeout(() => {
       localStorage.setItem('isLoggedIn', true);
-      router.push('/');
+      router.push('/home');
     }, 5000); // 5 saniye bekledikten sonra ana sayfaya yönlendir
   } else {
     // Kullanıcı adı ve şifre yanlışsa işlemleri buraya ekleyebilirsiniz
@@ -108,12 +113,12 @@ const validateUsernameAndPassword = async () => {
 };
 
 
-onBeforeUnmount(() => {
-  clearInterval(intervalId.value);
-  // gonna close websocket
+// onBeforeUnmount(() => {
+//   clearInterval(intervalId.value);
+//   // gonna close websocket
 
   
-});
+// });
 </script>
 
 <style scoped>
