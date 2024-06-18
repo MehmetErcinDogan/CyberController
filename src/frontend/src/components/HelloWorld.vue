@@ -7,6 +7,7 @@
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
+    <button v-on:click = "sendMessage('Hello World')">Send Message</button>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
@@ -31,10 +32,18 @@
 </template>
 
 <script>
+// import App from '@/App.vue';
+
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+    ws: WebSocket,
+  },
+  methods: {
+    sendMessage: function(msg){
+      this.$parent.sendMessage(msg);
+    }
   }
 }
 </script>
