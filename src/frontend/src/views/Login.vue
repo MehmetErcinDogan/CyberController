@@ -84,15 +84,16 @@ onMounted(() => {
   
 });
 
-// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol Cevap: Kontrol ettim login sayfasındakileri yorum satırına aldıklarında bir problem yok.
+// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol Cevap: Kontrol ettim login sayfasındakileri yorum satırına aldıklarında toggleLogin fonksiyonu,.
+//dışındaki diğer fonksiyonlar bir şekilde etkiliyor sanırım login olmayı çünkü bu şekilde yaptığımızda login buttonuna basıldığında route etmiyor.
 // TO DO: onBeforeMount fonksitonu bir kere mi çalışıyor ve neden onMounted içinde tanımlanmış? O fonksiyonda başka işlevlerde olacak.
 //Cevap: onBeforeMount fonksiyonuna gerek yokmuş. 
 // TO DO: localStorage sıfırlanması gerekli her sayfa açıldığında app vueda başlangıçta sıfırlasın. App vue refresh edildiğinde bir daha çağrılmıyor zaten değil mi?
 // // App.vue de router.beforeEach((to, from, next) => {
 //     localStorage.clear();
 //     next();
-//   }); onMounted kısmında bunu yazdım. Bu sayede her route veya refresh edildiğinde localstorage clear yapıyor. Refresh edildiğinde App.vue bir daha açılmayacak. Çünkü
-// App.vue sadece routing işlemleri için bir istasyon görevi görüyor.
+//   }); onMounted kısmında bunu yazdım. Bu sayede her route veya refresh edildiğinde localstorage clear yapıyor. Fakat şöyle bir sorunu var. 
+//Local storage sürekli sıfırlandığından herhangi başka bir sayfada bile olduğumuzda refresh atıldığında login sayfasına geri dönüyor.
  
 
 
@@ -103,11 +104,11 @@ onMounted(() => {
 */
 
 // // Login related functions and variables
-// const loginBgColor = ref('#57B846');
-// const loginColor = ref('#fff');
-const showLoginForm = ref(true);
-// const progressOpacity = ref(0);
-// const intervalId = ref(null);
+ const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
+ const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
+const showLoginForm = ref(true);//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
+const progressOpacity = ref(0);
+ const intervalId = ref(null);
 
 const handleLogin = async () => {
   const isValid = await validateUsernameAndPassword();
@@ -125,6 +126,22 @@ const validateUsernameAndPassword = async () => {
   return true; // Örnek olarak her zaman geçerli olduğunu varsayalım.
   // Bu kısma bir kullanıcı adı ve şifre kontrolü yapılacak.
 };
+//   const startProgress = () => {
+//   progressOpacity.value = 1;
+//    intervalId.value = setInterval(rotateProgress, 50);
+//   };
+
+//   const rotateProgress = () => {
+//     const progressElement = document.querySelector('.progress');
+//    const rotation = 1;
+
+//    for (let i = 0; i < 361; i++) {
+//      progressElement.style.transform = `rotate(${50}deg)`;
+//      console.log('Dönme Açısı:', i);
+//    }
+//  };
+
+
 
 
 // onBeforeUnmount(() => {
