@@ -19,13 +19,14 @@
             <h1 class="tcp-ipp">TCP IP</h1>
 
           </div>
-          
+          <!-- Bu buttona basıldığında logout olup tekrardan giriş ekranına gitmesi gerekiyor. Bunun için fonksiyonu yazılmalı. -->
           <button class="logout">Logout</button>
         </div>
       </div>
     </div>
     <div class="History">
       <h1 class="h1">History</h1>
+      <!-- Kullanıcının history kısmı  -->
       <div class="port-scanner-info">
         <div class="up-port">
           <div class="label1">
@@ -33,12 +34,14 @@
               <h1 class="ProblemT">Problems</h1>
               <h1 class="ProblemT1">Names</h1>
             </div>
+            <!-- Burdaki problemler kısmının içeriğini script kısmındaki problems arrayinden alıyor bunu jsondan almalı. -->
             <div v-for="(item, index) in problems" :key="index" class="Problem" @click="selectProblem(index)">
               <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item.problem }}</h1>
               <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item.name }}</h1>
             </div>
           </div>
           <div class="buttons">
+            <!-- Kullanıcının problemleri silmesi ve temizlemesi için koyduğum buttonlar. -->
             
             <button class="clear" @click="clearItems">Clear</button>
             <button class="delete" @click="deleteItem">Delete</button>
@@ -48,6 +51,7 @@
           <h1 class="Storage1">Storage</h1>
         </div>
         <div class="menu">
+          <!-- Burda bir button var upload files adında bizim back-end de oluşturduğumuz storage kısmına burdan dosya yüklüyoruz. -->
           <button class="btnpopup" @click="toggleUploadPopup">Upload Files</button>
           <div class="modal" v-if="showUploadPopup">
             <div class="modal-content">
@@ -71,6 +75,7 @@
       <h1 class="o1">Order</h1>
       <h2>Menü</h2>
       <div class="menu-components">
+        <!-- Burası order menüsü kısmı burda kullanıcı tarih,saat ve işlem seçicek. -->
         <div>
           <label for="tarih">Tarih:</label>
           <input type="date" v-model="tarih" id="tarih">
@@ -91,17 +96,20 @@
           <label for="isim">İsim:</label>
           <input type="text" v-model="isim" id="isim">
         </div>
+        <!-- Bu kaydet buttonu ile işlem kaydedilecek. -->
         <button @click="kaydet">Kaydet</button>
       </div>
       <div class="down-order">
         <div class="label1">
           <h1>İşlem Listesi</h1>
           <ul>
+            <!-- Kaydedilen kayıtlar bu kısımda gösterilecek. -->
             <li v-for="(record, index) in kayitlar" :key="index" @click="selectKayit(index)">
               <span :class="{'selected': selectedKayitIndex === index}">{{ record }}</span>
             </li>
           </ul>
         </div>
+        <!-- Bu button sayesinde seçilen kayıtlar silinecek. -->
         <button class="btndelete1" @click="sil">Sil</button>
       </div>
     </div>
@@ -122,7 +130,7 @@ const sonuc = ref('');
 const kayitlar = ref([]);
 const selectedKayitIndex = ref(null);
 
-
+// Bu fonksiyon order kısmında yeni kayıtları kaydedicek.
 const kaydet = () => {
   const yeniKayit = `Tarih: ${tarih.value}, Saat: ${saat.value}, İşlem: ${islem.value}, İsim: ${isim.value}`;
   kayitlar.value.push(yeniKayit);
@@ -132,18 +140,18 @@ const kaydet = () => {
   isim.value = '';
   selectedKayitIndex.value = null;  // Reset the selected index after saving a new record
 };
-
+//Bu fonksiyon ile kayıtlardan biri seçilebilecek.
 const selectKayit = (index) => {
   selectedKayitIndex.value = index;
 };
-
+//Seçilen order silinecek.
 const sil = () => {
   if (selectedKayitIndex.value !== null) {
     kayitlar.value.splice(selectedKayitIndex.value, 1);
     selectedKayitIndex.value = null;
   }
 };
-
+//Pop menüyü açıyor.
 function toggleUploadPopup() {
   showUploadPopup.value = !showUploadPopup.value;
 }
@@ -177,18 +185,18 @@ function formatSize(bytes) {
   const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
-
+//Dosya yüklemek için açılan pop-up menüyü kapatıyor.
 function closeUploadPopup() {
   showUploadPopup.value = false;
 }
-
+//Problemlerin bulunduğu array
 const problems = ref([
   { problem: 'Problem1', name: 'Name1' },
   { problem: 'Problem2', name: 'Name2' },
   { problem: 'Problem3', name: 'Name3' },
   { problem: 'Problem4', name: 'Name4' },
 ])
-
+//Problemi seçmek için fonksiyon
 const selectedIndex = ref(null)
 const selectProblem = (index) => {
   selectedIndex.value = index
@@ -202,13 +210,13 @@ const selectItem = () => {
     alert('Please select a problem.')
   }
 }
-
+// Problemleri clear etmek için
 const clearItems = () => {
   problems.value = []
   selectedIndex.value = null
 
 }
-
+//Problemleri silmek için
 const deleteItem = () => {
   if (selectedIndex.value !== null) {
     problems.value.splice(selectedIndex.value, 1)

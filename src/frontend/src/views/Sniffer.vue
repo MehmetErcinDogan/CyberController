@@ -1,6 +1,7 @@
 <template>
     <div class="container">
       <div class="table-container">
+        <!-- Bu kısımda bir sniffer tablomuz var. -->
         <table class="data-table">
           <thead>
             <tr>
@@ -11,6 +12,7 @@
             </tr>
           </thead>
           <tbody>
+            <!-- Tablodaki bu değerleri script kısmındaki items adında bir arrayden alıyorum. Bu json formatında alınacak. -->
             <tr v-for="(item, index) in items" :key="index" @click="selectItem(item)">
               <td>{{ item.name }}</td>
               <td>{{ item.tcpip }}</td>
@@ -19,10 +21,12 @@
             </tr>
           </tbody>
         </table>
+        <!-- Bu buttona ait startAction fonksiyonunun içeriğinin yazılması lazım. Sanırım bu fonksiyon json formatında değerleri getirecek. -->
         <button @click="startAction">Start</button>
       </div>
       
       <div v-if="selectedItem" class="popup">
+        <!-- Seçilen tablonun satırına göre o elemana ait verilerin gösterildiği pop-up menü  -->
         <div class="popup-content">
           <h2>Item Details</h2>
           <p><strong>Name:</strong> {{ selectedItem.name }}</p>
@@ -54,7 +58,7 @@
   function closePopup() {
     selectedItem.value = null;
   }
-  
+  //Bu aşağıdaki fonksiyonun içeriği yazılmalı.
   function startAction() {
     alert('Start button clicked!');
   }

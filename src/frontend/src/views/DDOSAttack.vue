@@ -2,18 +2,22 @@
     <div class="container">
       <div class="ddos-components">
         <div>
-          <label for="target-ip">Target-IP:</label>
+          <!-- Bu kısım da kullanıcıdan bir target-ip alınacak  -->
+          <label for="target-ip">Target-IP:</label> 
           <input type="text" v-model="targetIp" id="target-ip">
         </div>
         <div>
+          <!-- Bu kısımda ne zaman ddos atılacağı belirlenecek  -->
           <label for="timeout">Timeout:</label>
           <input type="time" v-model="timeout" id="timeout">
         </div>
       </div>
+      <!-- Bu buttona basıldığında yazılan target-ip ve ne zaman atılacağı bilgilerinin alınıp ddos atma fonksiyonu çalışacak.  -->
       <button class="btnstart" @click="startDDOS">Start</button>
       <div class="progressbar-container">
         <div class="progressbar" :style="progressStyle">{{ progress }}%</div>
       </div>
+      <!-- Bu log kısmı bizim görmek ddos atılırken görmek istediğimiz kısımları göstericek. -->
       <div class="log-container">
         <div class="log">
           <div v-for="(log, index) in logs" :key="index">{{ log }}</div>

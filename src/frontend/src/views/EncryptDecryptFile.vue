@@ -2,6 +2,9 @@
     <div class="container">
       <div class="controls">
         <div class="file-select">
+          <!-- Bu select file kısmı daha önce storage kısmına kaydettiğimiz dosyaları seçebilmek için kullanıyoruz. Şuan yanlış yapıyor.  -->
+           <!-- Şuan dosyaları bilgisayardan seçiyor bizim back-end de bir storage oluşturup,profil kısmında bu storage kısmına dosya yükleyip, -->
+            <!-- Bu encyrpt kısmında o storage kısmından seçmemiz lazım. -->
           <label for="file">Select File:</label>
           <input type="file" id="file" @change="handleFileSelect">
         </div>
@@ -21,6 +24,7 @@
         </div>
       </div>
       <div class="actions">
+        <!-- Burdaki buttonlarda seçilen methoda, dosyaya veya encrypt veya decrypt olaylarına göre işlemler yapılacak. Bu fonksiyonlar yazılmalı. -->
         <button class="btnstart" @click="startProcess">Start</button>
         <button class="btnselect" @click="selectOutputPath">Output Path</button>
       </div>

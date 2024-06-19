@@ -111,7 +111,8 @@ const handleLogin = async () => {
 };
 
 const validateUsernameAndPassword = async () => {
-  return true; // Örnek olarak her zaman geçerli olduğunu varsayalım
+  return true; // Örnek olarak her zaman geçerli olduğunu varsayalım.
+  // Bu kısma bir kullanıcı adı ve şifre kontrolü yapılacak.
 };
 
 

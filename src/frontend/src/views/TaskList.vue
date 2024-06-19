@@ -54,6 +54,7 @@
       removeTask(index);
     }
   };
+    // Bu aşağıdaki 3 fonksiyonda değişiklikler yapmak lazım. Çünkü kaydedilen tasklar locale kaydediliyor.
   const saveData = () => {
     localStorage.setItem("tasks", JSON.stringify(tasks.value));
   };

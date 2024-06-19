@@ -1,6 +1,8 @@
 <template>
     <div class="full-screen-container">
         <div class="up-container">
+          <!-- Burda bir button var. Bu buttona basıldığında localdeki cihazların ip leri çıkarılacak. -->
+          <!-- Bu adresler aşağıdaki local ıp name başlıklı kısmın altında yazılacak. -->
           
           <button class="btn1">Button</button>
         </div>

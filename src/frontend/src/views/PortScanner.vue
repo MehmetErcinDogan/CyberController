@@ -7,9 +7,12 @@
         <h1 class="l2">Device2</h1>
         <h1 class="l2">Device3</h1>
       </div>
+      <!-- Bu aşağıdaki Scan buttonu yukarıdaki Listing devices kısmında cihazları listeleyecek. Ben şuan 3 tane rastgele yazdım. -->
+       <!-- Device 1 , Device2 gibi bunları silebilirsin.  -->
       <button class="btn-scan">Scan</button>
     </div>
     <div class="down-container">
+      <!-- Portlar için burada bir tablo oluşturdum. Aşağıda portun içeriği için bir array kullandım. -->
       <table class="ports-table">
         <thead>
           <tr>
@@ -19,6 +22,8 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Bu bilgiler script kısmında arrayden geliyor.  -->
+           <!-- Aşağıdaki showDetails fonksiyonu portun içindeki bir elemana tıklandığında portun bilgilerinin gösterildiği bir modal açılıyor. -->
           <tr v-for="port in ports" :key="port.portNumber" @click="showDetails(port)">
             <td>{{ port.portNumber }}</td>
             <td>{{ port.clickStatus }}</td>
@@ -26,12 +31,16 @@
           </tr>
         </tbody>
       </table>
+      <!-- Bu search fonksiyonu yapılması lazım click olduğunda sanırım bu buttona basıldığında port tablosunun içeriğini dolduracak.  -->
       <button class="btn-search">Search</button>
     </div>
     <div v-if="selectedPort" class="modal">
       <div class="modal-content">
+        <!-- Bu kısım seçilen porta göre modalın içeriği gösteriliyor. -->
         <span class="close" @click="closeModal">&times;</span>
         <h2 class="ptdetails">Port Details</h2>
+        <!-- Bu generateRandomNumber gibi fonksiyonları rastgele yazdım. Aslında sadece arrayi biraz daha büyütecez.  -->
+         <!-- İstediğin daha fazla özellik varsa bunları arraye yazıp çekebilirsin. -->
         <p>Packet ID: {{ generateRandomNumber() }}</p>
         <p>Packet Name: {{ randomFruitName() }}</p>
         <p>Port Number: {{ selectedPort.portNumber }}</p>
@@ -46,7 +55,7 @@
 
 <script setup>
 import { ref } from 'vue';
-
+// Bu arrayi json formatında çekilmesi gerekiyor.
 const ports = ref([
   { portNumber: '123456', clickStatus: 'clickable', able: 1 },
   { portNumber: '234567', clickStatus: 'unclickable', able: 0 },
@@ -62,7 +71,7 @@ const showDetails = (port) => {
 const closeModal = () => {
   selectedPort.value = null;
 };
-
+// Aşağıdaki 2 fonksiyon gereksiz 
 const generateRandomNumber = () => {
   return Math.floor(Math.random() * 1000000);
 };
