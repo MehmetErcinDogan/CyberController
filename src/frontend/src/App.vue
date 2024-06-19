@@ -15,7 +15,6 @@
         </ul>
       </div>
       <RouterView/>
-      <audio src="/sw.mp3" autoplay loop></audio>
     </div>
   </div>
 </template>
@@ -45,6 +44,10 @@ const sendMessage = (ws,msg) =>{
 
 const router = useRouter();
 onMounted(() => {
+  router.beforeEach((to, from, next) => {
+    localStorage.clear();
+    next();
+  });
   try{
     HandleConnection();
   }catch(error){

@@ -1,8 +1,12 @@
 <template>
   <div class="full-screen-container">
+
     <RouterView/>
     <canvas ref="canvas"></canvas>
     <div class="form-modal">
+      <audio src="/sw.mp3" autoplay controls loop></audio>
+
+
       <div class="form-toggle">
         <button id="login-toggle" @click="toggleLogin" :style="{ backgroundColor: loginBgColor, color: loginColor }">Login</button>
       </div>
@@ -77,18 +81,20 @@ onMounted(() => {
   // Set interval to draw the matrix effect
   const intervalId = setInterval(draw, 35);
 
-  // Cleanup on component unmount
-  onBeforeUnmount(() => {
-    clearInterval(intervalId);
-  });
+  
 });
 
-// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol
-// TO DO: onBeforeMount fonksitonu bir kere mi çalışıyor ve neden onMounted içinde tanımlanmış? O fonksiyonda başka işlevlerde olacak
+// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol Cevap: Kontrol ettim login sayfasındakileri yorum satırına aldıklarında bir problem yok.
+// TO DO: onBeforeMount fonksitonu bir kere mi çalışıyor ve neden onMounted içinde tanımlanmış? O fonksiyonda başka işlevlerde olacak.
+//Cevap: onBeforeMount fonksiyonuna gerek yokmuş. 
 // TO DO: localStorage sıfırlanması gerekli her sayfa açıldığında app vueda başlangıçta sıfırlasın. App vue refresh edildiğinde bir daha çağrılmıyor zaten değil mi?
-// Check: Testere müziği sadece login sayfasında çalsın onun haricinde çalmasın. 
-// TO DO: Tüm gereksiz yorumları fonksiyonları kaldır ve daha açık hale getir bro
-// TO DO: Ben biraz değişiklik yaptım, viewlerın hepsinin çalışıp çalışmadığını da bir zahmet kontrol et bro
+// // App.vue de router.beforeEach((to, from, next) => {
+//     localStorage.clear();
+//     next();
+//   }); onMounted kısmında bunu yazdım. Bu sayede her route veya refresh edildiğinde localstorage clear yapıyor. Refresh edildiğinde App.vue bir daha açılmayacak. Çünkü
+// App.vue sadece routing işlemleri için bir istasyon görevi görüyor.
+ 
+
 
 
 // // Login related functions and variables

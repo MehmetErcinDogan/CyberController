@@ -39,10 +39,10 @@
         <!-- Bu kısım seçilen porta göre modalın içeriği gösteriliyor. -->
         <span class="close" @click="closeModal">&times;</span>
         <h2 class="ptdetails">Port Details</h2>
-        <!-- Bu generateRandomNumber gibi fonksiyonları rastgele yazdım. Aslında sadece arrayi biraz daha büyütecez.  -->
+        
          <!-- İstediğin daha fazla özellik varsa bunları arraye yazıp çekebilirsin. -->
-        <p>Packet ID: {{ generateRandomNumber() }}</p>
-        <p>Packet Name: {{ randomFruitName() }}</p>
+        <p>Packet ID: {{ selectedPort.packetId }}</p>
+        <p>Packet Name: {{ selectedPort.packetName }}</p>
         <p>Port Number: {{ selectedPort.portNumber }}</p>
         <p>Click Status: {{ selectedPort.clickStatus }}</p>
         <p>Able: {{ selectedPort.able }}</p>
@@ -57,9 +57,9 @@
 import { ref } from 'vue';
 // Bu arrayi json formatında çekilmesi gerekiyor.
 const ports = ref([
-  { portNumber: '123456', clickStatus: 'clickable', able: 1 },
-  { portNumber: '234567', clickStatus: 'unclickable', able: 0 },
-  { portNumber: '345678', clickStatus: 'clickable', able: 1 },
+  { portNumber: '123456', clickStatus: 'clickable', able: 1 , packetId: '9974', packetName: 'Elma' },
+  { portNumber: '234567', clickStatus: 'unclickable', able: 0, packetId: '9975', packetName: 'Armut'  },
+  { portNumber: '345678', clickStatus: 'clickable', able: 1, packetId: '9976', packetName: 'Çilek'  },
 ]);
 
 const selectedPort = ref(null);
@@ -71,15 +71,8 @@ const showDetails = (port) => {
 const closeModal = () => {
   selectedPort.value = null;
 };
-// Aşağıdaki 2 fonksiyon gereksiz 
-const generateRandomNumber = () => {
-  return Math.floor(Math.random() * 1000000);
-};
 
-const randomFruitName = () => {
-  const fruits = ['Elma', 'Armut', 'Muz', 'Kiraz', 'Çilek', 'Üzüm', 'Karpuz'];
-  return fruits[Math.floor(Math.random() * fruits.length)];
-};
+
 </script>
 
 

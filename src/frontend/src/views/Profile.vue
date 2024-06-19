@@ -151,7 +151,7 @@ const sil = () => {
     selectedKayitIndex.value = null;
   }
 };
-//Pop menüyü açıyor.
+//Pop-up menüyü açıyor.
 function toggleUploadPopup() {
   showUploadPopup.value = !showUploadPopup.value;
 }
@@ -202,14 +202,7 @@ const selectProblem = (index) => {
   selectedIndex.value = index
 }
 
-const selectItem = () => {
-  const selectedProblem = problems.value[selectedIndex.value]
-  if (selectedProblem) {
-    console.log('Selected:', selectedProblem)
-  } else {
-    alert('Please select a problem.')
-  }
-}
+
 // Problemleri clear etmek için
 const clearItems = () => {
   problems.value = []
