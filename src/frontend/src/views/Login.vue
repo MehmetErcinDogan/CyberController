@@ -96,6 +96,11 @@ onMounted(() => {
  
 
 
+/* TO DO for Myself
+ * validateUsernameandpassword gonna complete
+ * websocket connections gonna handle
+ * handle websockets and server side implent it for all pages
+*/
 
 // // Login related functions and variables
 // const loginBgColor = ref('#57B846');
