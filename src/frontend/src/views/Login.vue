@@ -90,6 +90,11 @@ onMounted(() => {
 // TO DO: Tüm gereksiz yorumları fonksiyonları kaldır ve daha açık hale getir bro
 // TO DO: Ben biraz değişiklik yaptım, viewlerın hepsinin çalışıp çalışmadığını da bir zahmet kontrol et bro
 
+/* TO DO for Myself
+ * validateUsernameandpassword gonna complete
+ * websocket connections gonna handle
+ * handle websockets and server side implent it for all pages
+*/
 
 // // Login related functions and variables
 // const loginBgColor = ref('#57B846');
