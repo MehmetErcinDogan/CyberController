@@ -55,7 +55,7 @@
     position: relative;
     width: 100vw; /* Ekran genişliği kadar */
     height: 100vh; /* Ekran yüksekliği kadar */
-    overflow: hidden; /* Gerektiğinde içeriği kırp */
+    overflow: scroll;
   }
   
   .ddos-components {

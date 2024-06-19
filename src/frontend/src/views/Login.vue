@@ -142,8 +142,8 @@ canvas {
 }
 .form-modal {
   position:relative;
-  width:650px;
-  height:auto;
+  width:40%;
+  height:40%;
   margin-top:10em;
   margin-left: 150px;
   left:30%;

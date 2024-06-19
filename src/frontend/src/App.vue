@@ -107,7 +107,7 @@ html, body {
   margin: 0;
 }
 .nav-links li {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
 

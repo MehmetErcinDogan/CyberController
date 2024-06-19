@@ -27,6 +27,8 @@
   flex-direction: column;
   justify-content: space-between;
   font-family: "Roboto Flex", sans-serif;
+  overflow-x: hidden;
+
 
   
 

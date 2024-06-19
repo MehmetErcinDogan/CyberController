@@ -83,6 +83,8 @@ const randomFruitName = () => {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-x: hidden;
+
 }
 
 .up-container {
@@ -109,6 +111,8 @@ const randomFruitName = () => {
   background-color: rgba(204, 31, 161, 0.245);
   margin-right: 20px;
   margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+  margin-left: 15%;
+
 }
 
 .ports-table {
