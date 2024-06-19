@@ -29,11 +29,6 @@ const router = createRouter({
       component: () => import('../views/PortScanner.vue')
     },
     {
-      path: '/packet-tracker',
-      name: 'packetTracker',
-      component: () => import('../views/PacketTracker.vue')
-    },
-    {
       path: '/task-list',
       name: 'taskList',
       component: () => import('../views/TaskList.vue')
