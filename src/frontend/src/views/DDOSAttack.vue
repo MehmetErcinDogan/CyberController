@@ -54,7 +54,7 @@
   };
   </script>
   
-  <style>
+  <style scoped>
   .container {
     position: relative;
     width: 100vw; /* Ekran genişliği kadar */

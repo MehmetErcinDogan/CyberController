@@ -222,13 +222,13 @@ const deleteItem = () => {
 
 </script>
 
-<style>
+<style scoped>
 
 .container{
     
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
+    
     font-family: "Roboto Flex", sans-serif;
 
     
@@ -236,8 +236,13 @@ const deleteItem = () => {
    
     
 }
+.container::-webkit-scrollbar{
+  display: none;
+}
 .up-profile{
     display: flex;
+    width: 100%;
+    height: 30%;
     
  
  color: white;

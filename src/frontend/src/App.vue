@@ -75,10 +75,8 @@ onMounted(() => {
 html, body {
   background: linear-gradient(135deg, #153677, #4e085f);
   padding: 0;
-  overflow: hidden; /* Gerektiğinde içeriği kırp */
-  margin: 0;
   
-
+  margin: 0;
   height: 100%;
   width: 100%;
 }
@@ -89,37 +87,31 @@ html, body {
   padding: 0;
 }
 .about {
-  /* Sayfa yüksekliğini ekran yüksekliği kadar yap */
   height: 100vh;
 }
 .navbar {
   position: fixed;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Linklerin arasındaki boşluğu dinamik olarak ayarlar */
   background-color: #222;
   padding: 15px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  overflow-y: hidden;
 }
 .nav-links {
-  list-style-type: none;
-  gap: 70px;
-  
   display: flex;
-  
+  justify-content: space-between;
+  list-style-type: none;
   padding: 0;
   margin: 0;
+  width: 100%;
 }
 .nav-links li {
-  
-
   font-size: 15px;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
-
-
+  white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
 }
 .nav-links li a {
   color: #fff;
@@ -136,4 +128,6 @@ html, body {
   background-color: #ff5945;
   color: #fff;
 }
+
+
 </style>

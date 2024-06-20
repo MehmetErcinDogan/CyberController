@@ -51,13 +51,16 @@
   };
   </script>
   
-  <style>
+  <style scoped>
   .container {
     position: relative;
     width: 100vw; /* Ekran genişliği kadar */
     height: 100vh; /* Ekran yüksekliği kadar */
     overflow: scroll;
 
+  }
+  .container::-webkit-scrollbar{
+    display: none;
   }
   
   .controls {

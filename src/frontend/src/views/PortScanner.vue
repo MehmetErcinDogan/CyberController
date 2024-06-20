@@ -86,45 +86,57 @@ const closeModal = () => {
   flex-direction: column;
   justify-content: space-between;
   overflow-x: hidden;
+  box-sizing: border-box;
 
 }
 
 .up-container {
-  margin-top: 100px;
+  height: 45%;
+  width: 100%;
+  margin-top: 10%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   margin-bottom: 20px; /* Aradaki mesafeyi azaltmak için */
-  margin-right: 50%;
+  
+  padding: 0 5%;
+
 }
 
 .down-container {
+  height: 45%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 100px;
+  margin-bottom: 10%;
   position: relative; /* Search button'u hizalamak için relative konumlandırma */
-  margin-right: 70%;
+  
+  
   
 }
 
 .listing-devices {
-  width: 500px;
-  height: 300px;
+  width: 33%;
+  height: 100%;
   border-radius: 5px;
   background-color: rgba(204, 31, 161, 0.245);
-  margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
-  margin-left: 0;
+  
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
 
 }
 
 .ports-table {
-  width: 500px;
+  width: 30%;
+  height: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
   background-color: rgba(204, 31, 161, 0.245);
   border-radius: 5px;
-  overflow: hidden;
+  
+  margin-right: 60%;
 }
 
 .ports-table th,
@@ -190,7 +202,7 @@ h1 {
   top: 50%;
   transform: translateY(-50%);
   
-  margin-left: 1000px;
+  margin-left: 12%;
   border: none;
   outline: none;
   padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */

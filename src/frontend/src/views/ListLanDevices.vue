@@ -21,7 +21,7 @@
 <script>
 
 </script>
-<style>
+<style scoped>
 .full-screen-container {
   width: 100vw;
   height: 100vh;
@@ -30,72 +30,82 @@
   justify-content: space-between;
   font-family: "Roboto Flex", sans-serif;
   overflow-x: hidden;
-
-
-  
-
 }
+
 .up-container {
-    margin-top: 7%;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  margin-bottom: 20px; /* Aradaki mesafeyi azaltmak için */
-  margin-left: 90%;
+  margin: 5% 5%; /* Dinamik marjin için yüzde kullanımı */
 }
 
 .down-container {
   display: flex;
+  justify-content: center; /* Ortalamak için center kullanımı */
   align-items: center;
-  margin-bottom: 100px;
+  flex-grow: 1;
+  width: 100%; /* Full width */
 }
 
-
-
-
-.alt-label{
-  width: 100%;
-    height: 1000px;
-    border-radius: 5px;
-    background-color: rgba(204, 31, 161, 0.245);
-
-  margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+.alt-label {
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  border-radius: 5px;
+  background-color: rgba(204, 31, 161, 0.245);
+  margin: 20px 0; /* Yatay margin kaldırıldı */
+  padding: 20px;
 }
 
-.a2{
+.a2 {
   margin-top: 1%;
   margin-left: 2%;
   font-size: 18px;
-  font-family: "Roboto Flex", sans-serif;
-
-
-
-}
-.btn1{
-  margin-left: 20%;
-  
-    
-    border: none;
-    outline: none;
-    padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
-    background: #ff5945;
-    color: #fff;
-    font-size: 24px; /* Font boyutunu biraz küçültün */
-    cursor: pointer;
-    border-radius: 15px; /* Daha yuvarlak köşeler için border-radius'u artırın */
-    transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
-    height: 50px;
-    font-family: "Roboto Flex", sans-serif;
-
-
 }
 
-.Lp2{
+.btn1 {
+  border: none;
+  outline: none;
+  padding: 8px 20px;
+  background: #ff5945;
+  color: #fff;
+  font-size: 18px; /* Daha küçük font boyutu */
+  cursor: pointer;
+  border-radius: 15px;
+  transition: background 0.3s ease;
+  height: 40px;
+  margin-top: 3%;
+}
+
+.Lp2 {
   font-size: 18px;
   color: white;
-  font-family: "Roboto Flex", sans-serif;
-
-
 }
+
+@media (max-width: 768px) {
+  .up-container {
+    margin: 5% 10%; /* Daha küçük cihazlar için marjin ayarlaması */
+    justify-content: center; /* Butonu ortalamak için center kullanımı */
+  }
+
+  .btn1 {
+    font-size: 16px; /* Daha küçük cihazlar için font boyutunu ayarlama */
+    height: 40px;
+    padding: 5px 15px;
+  }
+
+  .down-container {
+    margin: 10px 0; /* Daha küçük cihazlar için marjin ayarlaması */
+  }
+
+  .alt-label {
+    width: 100%; /* Full width */
+    height: auto; /* Yüksekliği içeriğe göre ayarla */
+  }
+
+  .a2 {
+    font-size: 16px;
+  }
+}
+
 
 </style>
