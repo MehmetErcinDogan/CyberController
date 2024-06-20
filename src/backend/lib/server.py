@@ -21,9 +21,27 @@ class Server:
         try:
             while True:
                 msg = await ws.recv()
-        except:
-            pass
+                if msg.lower() == "#EXIT": # msg handlerin geriye döünüşü ile bağlantı kurmaya bak
+                    print("WS connection closed",ws.remote_address)
+                    self._WSclients.remove(ws)
+                    await ws.close()
+                    
+                
+                await self._mssgHandler(msg)
 
+        except websockets.ConnectionClosed:
+            self._WSclients.remove(ws)
+            print(f"WS Client from {ws.remote_address} disconnected")
+        except Exception as e:
+            print(f"Error occured at ws client {e} from {ws.remote_address}")
+        finally:
+            if ws in self._WSclients:
+                self._WSclients.remove(ws)
+                await ws.close()
+                print(f"WS Connection closed {ws.remote_address}")
+
+    async def _mssgHandler(self,msg):
+        return
 
 if __name__ == "__main__":
     s1 = Server()
