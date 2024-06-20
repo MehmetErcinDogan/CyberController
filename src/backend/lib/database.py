@@ -1,4 +1,4 @@
-    # Buraya yazdım bro bitirme raporu için backend ile ilgili yaptığın araştırmaları bana atabilirsen sevinirim.
+# Buraya yazdım bro bitirme raporu için backend ile ilgili yaptığın araştırmaları bana atabilirsen sevinirim.
 #Websocket
 #websockets(yukardakinin asekron hali, farklı kütüphane)
 #SOCKET.IO

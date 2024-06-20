@@ -3,6 +3,7 @@ import asyncio
 from database import Database
 import sys
 
+
 class Server:
     def __init__(self, port=9999) -> None:
         try:
@@ -10,10 +11,11 @@ class Server:
             self._WSclients = []
             self._connectedID = []
             self._db = Database()
+
         except Exception as e:
-            print("Error occured during initialize server object as",e)
+            print("Error occured during initialize server object as", e)
             sys.exit()
-            
+
     def _run(self):
         print(f"Server started to listening on \"localhost:{self._port}\"")
         serve = websockets.serve(self._clientHandler, "localhost", self._port)
@@ -25,11 +27,9 @@ class Server:
         self._WSclients.append(ws.remote_address)
 
         try:
-            run = True
-            while run:
-                msg = await ws.recv()
-                tag, msg = await Server._parser()
-                run = await self._mssgHandler(tag, msg, ws)
+            msg = await ws.recv()
+            tag, msg = await Server._parser()
+            await self._mssgHandler(tag, msg, ws)
         except websockets.ConnectionClosed:
             self._WSclients.remove(ws)
             print(f"WS Client from {ws.remote_address} disconnected")
@@ -39,9 +39,10 @@ class Server:
             if ws in self._WSclients:
                 self._WSclients.remove(ws)
                 await ws.close()
+                # gonna check time out
                 print(f"WS Connection closed {ws.remote_address}")
 
-    async def _mssgHandler(self, tag, msg, ws): # NOT FİNİSHED
+    async def _mssgHandler(self, tag, msg, ws):
         try:
             if msg == "#CHECK":
                 if len(tag) != 1:
@@ -50,24 +51,24 @@ class Server:
                     try:
                         self._connectedID.index(tag[0])
                         await ws.send("#ALLOW")
-                        return True
+                        await self._connectedClient(ws)
                     except ValueError:
                         await ws.send("#DENY")
-                        return False
             elif msg == "#SIGN":
-                username = tag[0]
-                password = tag[1]
-                if self._db.checkUser(username,password):
-                    await ws.send("#ALLOW")
-                    return True
+                if len(tag) != 2:
+                    raise Exception("Wrong tag value")
                 else:
-                    await ws.send("#DENY")
-                    return False
-                
+                    username = tag[0]
+                    password = tag[1]
+                    if self._db.checkUser(username, password):
+                        # gonna create hash id and should add to list with last accsess time
+                        await ws.send("#ALLOW")
+                        await self._connectedClient(ws)
+                    else:
+                        await ws.send("#DENY")
         except Exception as e:
             print("Error occured at msgHandler as", e)
-            return False
-        
+
     async def _parser(msg):
         try:
             msg = msg.strip()
@@ -81,7 +82,10 @@ class Server:
         except Exception as e:
             print("Error occured at parser as", e)
 
+    async def _connectedClient(self, ws):
+        try:
+            while True:
+                tag, msg = await Server._parser(ws.recv())
 
-if __name__ == "__main__":
-    s1 = Server()
-    s1.run()
+        except Exception as e:
+            print("Error occured at connectedClient as", e)
