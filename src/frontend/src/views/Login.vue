@@ -4,7 +4,7 @@
     <RouterView/>
     <canvas ref="canvas"></canvas>
     <div class="form-modal">
-      <audio src="/sw.mp3" autoplay controls loop></audio>
+      <audio src="/sw.mp3" autoplay  loop></audio>
 
 
       <div class="form-toggle">
@@ -107,8 +107,8 @@ onMounted(() => {
  const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
  const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 const showLoginForm = ref(true);//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
-const progressOpacity = ref(0);
- const intervalId = ref(null);
+//const progressOpacity = ref(0);
+ //const intervalId = ref(null);
 
 const handleLogin = async () => {
   const isValid = await validateUsernameAndPassword();

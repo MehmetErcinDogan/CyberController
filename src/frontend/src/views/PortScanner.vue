@@ -94,6 +94,7 @@ const closeModal = () => {
   display: flex;
   align-items: center;
   margin-bottom: 20px; /* Aradaki mesafeyi azaltmak için */
+  margin-right: 50%;
 }
 
 .down-container {
@@ -113,7 +114,7 @@ const closeModal = () => {
   background-color: rgba(204, 31, 161, 0.245);
   margin-right: 20px;
   margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
-  margin-left: 15%;
+  margin-left: 0;
 
 }
 
@@ -170,7 +171,7 @@ h1 {
 
 .btn-scan {
   margin-top: 20px;
-  margin-left: 10%;
+  margin-left: 20%;
   border: none;
   outline: none;
   padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */

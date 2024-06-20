@@ -101,15 +101,20 @@ html, body {
   padding: 15px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  overflow-y: hidden;
 }
 .nav-links {
   list-style-type: none;
-  display: flex;
   gap: 70px;
+  
+  display: flex;
+  
   padding: 0;
   margin: 0;
 }
 .nav-links li {
+  
+
   font-size: 15px;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
