@@ -4,12 +4,12 @@
         <div>
           <!-- Bu kısım da kullanıcıdan bir target-ip alınacak  -->
           <label for="target-ip">Target-IP:</label> 
-          <input type="text" v-model="targetIp" id="target-ip">
+          <input class="target-ip1" type="text" v-model="targetIp" id="target-ip">
         </div>
         <div>
           <!-- Bu kısımda ne zaman ddos atılacağı belirlenecek  -->
           <label for="timeout">Timeout:</label>
-          <input type="time" v-model="timeout" id="timeout">
+          <input class="time1" type="time" v-model="timeout" id="timeout">
         </div>
       </div>
       <!-- Bu buttona basıldığında yazılan target-ip ve ne zaman atılacağı bilgilerinin alınıp ddos atma fonksiyonu çalışacak.  -->
@@ -56,84 +56,135 @@
   
   <style scoped>
   .container {
-    position: relative;
-    width: 100vw; /* Ekran genişliği kadar */
-    height: 100vh; /* Ekran yüksekliği kadar */
-    overflow: scroll;
-  }
-  
-  .ddos-components {
-    display: flex;
-    gap: 20%;
-    margin-top: 100px;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-    font-family: "Roboto Flex", sans-serif;
+  position: relative;
+  width: 100vw; /* Ekran genişliği kadar */
+  height: 100vh; /* Ekran yüksekliği kadar */
+  overflow: scroll;
+}
+.container::-webkit-scrollbar {
+  width: 10px;
+}
 
-  }
-  
-  .ddos-components div {
-    margin-bottom: 10px;
-  }
-  
-  .btnstart {
-    margin-top: 20px;
-    margin-left: 10%;
-    border: none;
-    outline: none;
-    padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
-    background: #ff5945;
-    color: #fff;
-    font-size: 24px; /* Font boyutunu biraz küçültün */
-    cursor: pointer;
-    border-radius: 15px; /* Daha yuvarlak köşeler için border-radius'u artırın */
-    transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
-    height: 50px;
-    font-family: "Roboto Flex", sans-serif;
-    font-weight: bold;
+.container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gümüş grisi renk */
+  border-radius: 5px;
+}
 
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Hover sırasında biraz daha koyu gri */
+}
 
-  }
-  
-  .progressbar-container {
-    width: 100%;
-    max-width: 100%;
-    background-color: #ccc;
-    border: 1px solid #000;
-    height: 50px;
-    margin-top: 10px;
-    position: relative;
-    font-weight: bold;
-    font-family: "Roboto Flex", sans-serif;
+.container::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Açık gri arka plan */
+}
 
-  }
-  
-  .progressbar {
-    height: 100%;
-    color: #fff;
-    text-align: center;
-    line-height: 50px;
-    transition: width 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  }
-  
-  .log-container {
-    
-    width: 100%;
-    height: 500px;
-    background-color: rgba(204, 31, 161, 0.245);
+.ddos-components {
+  display: flex;
+  gap: 20%;
+  margin-top: 100px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Roboto Flex", sans-serif;
+}
 
-    overflow-y: auto;
-    padding: 10px;
-  }
-  
-  .log {
-    font-weight: bold;
-    color: white;
-    font-size: 20px;
-    font-family: "Roboto Flex", sans-serif;
+.ddos-components label {
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  color: #ffffff;
+}
 
-  }
+.input-text, .input-time {
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  color: #000000;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin-left: 10px;
+}
+.target-ip1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+}
+.time1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+}
+
+.btnstart {
+  margin-top: 20px;
+  margin-left: 10%;
+  border: none;
+  outline: none;
+  padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
+  background: #ff5945;
+  color: #fff;
+  font-size: 24px; /* Font boyutunu biraz küçültün */
+  cursor: pointer;
+  border-radius: 15px; /* Daha yuvarlak köşeler için border-radius'u artırın */
+  transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
+  height: 50px;
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+}
+
+.progressbar-container {
+  width: 100%;
+  max-width: 100%;
+  background-color: #ccc;
+  border: 1px solid #000;
+  height: 50px;
+  margin-top: 10px;
+  position: relative;
+  font-weight: bold;
+  font-family: "Roboto Flex", sans-serif;
+}
+
+.progressbar {
+  height: 100%;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
+  transition: width 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.log-container {
+  width: 100%;
+  height: 500px;
+  background-color: rgba(204, 31, 161, 0.245);
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.log-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.log-container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gümüş grisi renk */
+  border-radius: 5px;
+}
+
+.log-container::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Hover sırasında biraz daha koyu gri */
+}
+
+.log-container::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Açık gri arka plan */
+}
+
+.log {
+  font-weight: bold;
+  color: white;
+  font-size: 20px;
+  font-family: "Roboto Flex", sans-serif;
+}
   </style>
   
   

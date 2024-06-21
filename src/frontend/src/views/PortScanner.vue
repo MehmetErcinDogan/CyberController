@@ -89,6 +89,22 @@ const closeModal = () => {
   box-sizing: border-box;
 
 }
+.full-screen-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.full-screen-container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gümüş grisi renk */
+  border-radius: 5px;
+}
+
+.full-screen-container::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Hover sırasında biraz daha koyu gri */
+}
+
+.full-screen-container::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Açık gri arka plan */
+}
 
 .up-container {
   height: 45%;

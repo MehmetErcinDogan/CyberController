@@ -6,14 +6,14 @@
            <!-- Şuan dosyaları bilgisayardan seçiyor bizim back-end de bir storage oluşturup,profil kısmında bu storage kısmına dosya yükleyip, -->
             <!-- Bu encyrpt kısmında o storage kısmından seçmemiz lazım. -->
           <label for="file">Select File:</label>
-          <input type="file" id="file" @change="handleFileSelect">
+          <input class="file1" type="file" id="file" @change="handleFileSelect">
         </div>
         <div class="dropdown">
           <label for="method">Encrypt Method:</label>
-          <select id="method" v-model="selectedMethod">
-            <option value="AES">AES</option>
-            <option value="RSA">RSA</option>
-            <option value="DES">DES</option>
+          <select class="method1" id="method" v-model="selectedMethod">
+            <option class="method1" value="AES">AES</option>
+            <option class="method1" value="RSA">RSA</option>
+            <option class="method1" value="DES">DES</option>
           </select>
         </div>
         <div class="radio-buttons">
@@ -78,6 +78,20 @@
     color: white;
     font-weight: bold;
     font-family: "Roboto Flex", sans-serif;
+
+  }
+  .file1{
+    font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+
+  }
+  .method1{
+    font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
 
   }
   

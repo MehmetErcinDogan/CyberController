@@ -77,34 +77,34 @@
       <div class="menu-components">
         <!-- Burası order menüsü kısmı burda kullanıcı tarih,saat ve işlem seçicek. -->
         <div>
-          <label for="tarih">Tarih:</label>
-          <input type="date" v-model="tarih" id="tarih">
+          <label class="tarih1" for="tarih">Tarih:</label>
+          <input class="tarih1"type="date" v-model="tarih" id="tarih">
         </div>
         <div>
-          <label for="saat">Saat:</label>
-          <input type="time" v-model="saat" id="saat">
+          <label class="saat1" for="saat">Saat:</label>
+          <input class="saat1"type="time" v-model="saat" id="saat">
         </div>
         <div>
-          <label for="islem">İşlem:</label>
-          <select v-model="islem" id="islem">
-            <option value="" disabled>İşlem seçin</option>
-            <option value="DDOS ATTACK">DDOS ATTACK</option>
-            <option value="SESSION ATTACK">SESSION ATTACK</option>
+          <label class="islem1" for="islem">İşlem:</label>
+          <select class="islem1"v-model="islem" id="islem">
+            <option class="islem1" value="" disabled>İşlem seçin</option>
+            <option class="islem1" value="DDOS ATTACK">DDOS ATTACK</option>
+            <option class="islem1" value="SESSION ATTACK">SESSION ATTACK</option>
           </select>
         </div>
         <div>
-          <label for="isim">İsim:</label>
-          <input type="text" v-model="isim" id="isim">
+          <label class="isim1"for="isim">İsim:</label>
+          <input class="isim1"type="text" v-model="isim" id="isim">
         </div>
         <!-- Bu kaydet buttonu ile işlem kaydedilecek. -->
-        <button @click="kaydet">Kaydet</button>
+        <button class="kaydet1"@click="kaydet">Kaydet</button>
       </div>
       <div class="down-order">
         <div class="label1">
           <h1>İşlem Listesi</h1>
           <ul>
             <!-- Kaydedilen kayıtlar bu kısımda gösterilecek. -->
-            <li v-for="(record, index) in kayitlar" :key="index" @click="selectKayit(index)">
+            <li class="record1" v-for="(record, index) in kayitlar" :key="index" @click="selectKayit(index)">
               <span :class="{'selected': selectedKayitIndex === index}">{{ record }}</span>
             </li>
           </ul>
@@ -228,7 +228,7 @@ const deleteItem = () => {
     
     width: 100%;
     height: 100%;
-    
+    overflow: scroll;
     font-family: "Roboto Flex", sans-serif;
 
     
@@ -236,8 +236,22 @@ const deleteItem = () => {
    
     
 }
-.container::-webkit-scrollbar{
+.container::-webkit-scrollbar {
+  width: 10px;
   display: none;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gümüş grisi renk */
+  border-radius: 5px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Hover sırasında biraz daha koyu gri */
+}
+
+.container::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Açık gri arka plan */
 }
 .up-profile{
     display: flex;
@@ -422,7 +436,7 @@ const deleteItem = () => {
   border-radius: 10px;
   width: 400px;
   max-height: 90%;
-  overflow-y: auto;
+  
   font-family: "Roboto Flex", sans-serif;
 
 }
@@ -440,6 +454,23 @@ const deleteItem = () => {
   font-family: "Roboto Flex", sans-serif;
 
 }
+.kaydet1{
+  border: none;
+  border: none;
+    outline: none;
+    padding: 16px 40px;
+    background: #ff5945;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 40px;
+    height: 40px;
+    font-family: "Roboto Flex", sans-serif;
+    margin-top: -1%;
+    
+    
+
+}
 .menu1 {
   margin-left: 35%;
   border-radius: 10px;
@@ -447,7 +478,7 @@ const deleteItem = () => {
   color: white;
   font-family: sans-serif;
   font-size: 14px;
-  overflow-x: hidden;
+  
   font-family: "Roboto Flex", sans-serif;
 
 }
@@ -476,6 +507,39 @@ const deleteItem = () => {
   font-family: "Roboto Flex", sans-serif;
   margin-top: 5%;
 
+}
+.tarih1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+
+}
+.saat1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+
+}
+.islem1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+
+}
+.isim1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #b4049c;
+}
+.record1{
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: #baf5d7;
 }
 .down-order{
   margin-top: 100px;

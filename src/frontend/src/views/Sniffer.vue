@@ -72,6 +72,23 @@
     overflow: scroll;
 
   }
+  .container::-webkit-scrollbar {
+  width: 10px;
+  display: none;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* Gümüş grisi renk */
+  border-radius: 5px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0; /* Hover sırasında biraz daha koyu gri */
+}
+
+.container::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* Açık gri arka plan */
+}
   
   .table-container {
     width: 50%;

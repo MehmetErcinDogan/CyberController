@@ -110,7 +110,7 @@ html, body {
 .nav-links li {
   font-size: 15px;
   font-weight: bold;
-  font-family: "Roboto Flex", sans-serif;
+  font-family: 'Times New Roman', Times, serif;
   white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
 }
 .nav-links li a {
