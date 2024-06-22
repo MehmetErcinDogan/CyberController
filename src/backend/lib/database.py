@@ -11,6 +11,7 @@
 #pickle
 #encyrpting 
 #ve bir çok temel şey artı vue js de uğraştıklarımız
+#dataclasses (yeni eklendi)
 
 class Database:
     pass

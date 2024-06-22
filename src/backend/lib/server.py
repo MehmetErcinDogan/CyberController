@@ -2,14 +2,33 @@ import websockets
 import asyncio
 from database import Database
 import sys
+import time
+from dataclasses import dataclass
 
+@dataclass
+class Client:
+    ws:websockets
+    id:hash
+    recentTime :float
+    username: str
+    password:str
+
+# gonna complete that class
+# functions are going to check
+# gonna complete db
+# gonna complete changes about the client list
+# gonna complete the features
+# gonna complete the hash function
+# gonna complete the features
+# gonna complete the vue linkage
+# gonna complete the another script for scheduled tasks
+# gonna think about above task
 
 class Server:
     def __init__(self, port=9999) -> None:
         try:
             self._port = port
-            self._WSclients = []
-            self._connectedID = []
+            self._clients = []
             self._db = Database()
 
         except Exception as e:
@@ -24,8 +43,9 @@ class Server:
 
     async def _clientHandler(self, ws):
         print(f"Websocket client connected from {ws.remote_address}")
-        self._WSclients.append(ws.remote_address)
-
+        client = Client(ws,id,time.time(),None,None)
+        self._clients.append(client)
+        print("All Ws Clients:",self._WSclients)
         try:
             msg = await ws.recv()
             tag, msg = await Server._parser()
@@ -36,10 +56,12 @@ class Server:
         except Exception as e:
             print(f"Error occured at ws client {e} from {ws.remote_address}")
         finally:
+            # for id,lastTime in self._connectedID:
+            #     if ((time.time()-lastTime)>(10*60)):
+            #         self._connectedID.remove((id,lastTime))
             if ws in self._WSclients:
                 self._WSclients.remove(ws)
                 await ws.close()
-                # gonna check time out
                 print(f"WS Connection closed {ws.remote_address}")
 
     async def _mssgHandler(self, tag, msg, ws):
@@ -86,6 +108,8 @@ class Server:
         try:
             while True:
                 tag, msg = await Server._parser(ws.recv())
+                if msg == "#as":
+                    print("asdas")
 
         except Exception as e:
             print("Error occured at connectedClient as", e)
