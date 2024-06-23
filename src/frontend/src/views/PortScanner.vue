@@ -24,7 +24,7 @@
         <tbody>
           <!-- Bu bilgiler script kısmında arrayden geliyor.  -->
            <!-- Aşağıdaki showDetails fonksiyonu portun içindeki bir elemana tıklandığında portun bilgilerinin gösterildiği bir modal açılıyor. -->
-          <tr v-for="port in ports" :key="port.portNumber" @click="showDetails(port)">
+           <tr v-if="showPorts" v-for="port in ports" :key="port.portNumber" @click="showDetails(port)">
             <td>{{ port.portNumber }}</td>
             <td>{{ port.clickStatus }}</td>
             <td>{{ port.able }}</td>
@@ -32,7 +32,7 @@
         </tbody>
       </table>
       <!-- Bu search fonksiyonu yapılması lazım click olduğunda sanırım bu buttona basıldığında port tablosunun içeriğini dolduracak.  -->
-      <button class="btn-search">Search</button>
+      <button class="btn-search" @click="searchPorts">Search</button>
     </div>
     <div v-if="selectedPort" class="modal">
       <div class="modal-content">
@@ -63,6 +63,8 @@ const ports = ref([
 ]);
 
 const selectedPort = ref(null);
+const showPorts = ref(false);
+
 
 const showDetails = (port) => {
   selectedPort.value = port;
@@ -70,6 +72,9 @@ const showDetails = (port) => {
 
 const closeModal = () => {
   selectedPort.value = null;
+};
+const searchPorts = () => {
+  showPorts.value = true;
 };
 
 

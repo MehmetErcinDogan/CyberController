@@ -20,7 +20,7 @@
 
           </div>
           <!-- Bu buttona basıldığında logout olup tekrardan giriş ekranına gitmesi gerekiyor. Bunun için fonksiyonu yazılmalı. -->
-          <button class="logout">Logout</button>
+          <button class="logout" @click="logout">Logout</button>
         </div>
       </div>
     </div>
@@ -217,6 +217,10 @@ const deleteItem = () => {
   } else {
     alert('Please select a problem to delete.')
   }
+}
+const logout = () => {
+  console.log('User logged out');
+  return true;
 }
 
 
