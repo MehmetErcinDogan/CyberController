@@ -18,9 +18,7 @@
         </form>
       </div>
     </div>
-    <div id="progressbar" :style="{ opacity: progressOpacity }">
-      <div class="progress"></div>
-    </div>
+    
   </div>
 </template>
 
@@ -34,7 +32,6 @@ const router = useRouter();
 
 onMounted(() => {
   // websocket gonna connect
-  console.log(localStorage.msg);
 
 
   const c = canvas.value;
@@ -79,7 +76,7 @@ onMounted(() => {
   };
 
   // Set interval to draw the matrix effect
-  const intervalId = setInterval(draw, 35);
+  setInterval(draw, 35);
 
   
 });
@@ -96,60 +93,22 @@ onMounted(() => {
 //Local storage sürekli sıfırlandığından herhangi başka bir sayfada bile olduğumuzda refresh atıldığında login sayfasına geri dönüyor.
  
 
-
-/* TO DO for Myself
- * validateUsernameandpassword gonna complete
- * websocket connections gonna handle
- * handle websockets and server side implent it for all pages
-*/
-
 // // Login related functions and variables
  const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
  const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 const showLoginForm = ref(true);//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
-//const progressOpacity = ref(0);
- //const intervalId = ref(null);
 
 const handleLogin = async () => {
   const isValid = await validateUsernameAndPassword();
-  if (isValid) {
-    setTimeout(() => {
-      localStorage.setItem('isLoggedIn', true);
-      router.push('/home');
-    }, 5000); // 5 saniye bekledikten sonra ana sayfaya yönlendir
-  } else {
-    // Kullanıcı adı ve şifre yanlışsa işlemleri buraya ekleyebilirsiniz
-  }
+
 };
 
 const validateUsernameAndPassword = async () => {
   return true; // Örnek olarak her zaman geçerli olduğunu varsayalım.
   // Bu kısma bir kullanıcı adı ve şifre kontrolü yapılacak.
 };
-//   const startProgress = () => {
-//   progressOpacity.value = 1;
-//    intervalId.value = setInterval(rotateProgress, 50);
-//   };
-
-//   const rotateProgress = () => {
-//     const progressElement = document.querySelector('.progress');
-//    const rotation = 1;
-
-//    for (let i = 0; i < 361; i++) {
-//      progressElement.style.transform = `rotate(${50}deg)`;
-//      console.log('Dönme Açısı:', i);
-//    }
-//  };
 
 
-
-
-// onBeforeUnmount(() => {
-//   clearInterval(intervalId.value);
-//   // gonna close websocket
-
-  
-// });
 </script>
 
 <style scoped>

@@ -1,14 +1,13 @@
 from dataclasses import dataclass
 from lib.database import Database
-from lib.features import DDOS
+import threading
 import websockets
 import datetime
 import hashlib
 import asyncio
-import time
 import json
+import time
 import sys
-
 
 # gonna complete the another script for scheduled tasks
 # gonna think about above task
@@ -42,13 +41,28 @@ class Server:
             print("Error occured during initialize server object as", e)
             sys.exit()
 
-    def run(self):  # runs server
+    def run(self):
         print(f"Server started to listening on \"localhost:{self._port}\"")
-        serve = websockets.serve(self._clientHandler, "localhost", self._port)
-        asyncio.get_event_loop().run_until_complete(serve)
-        asyncio.get_event_loop().run_forever()
-        # start server app and when client connected adds one more client handler function for each client
+        server_thread = threading.Thread(target=self._run_server)
+        server_thread.start()
 
+        try:
+            while True:
+                pass
+        except KeyboardInterrupt:
+            print("Keyborad")
+            server_thread.join()
+
+    async def _start_server(self):  # runs server
+        serve = await websockets.serve(self._clientHandler, "localhost", self._port)
+        await serve.wait_closed()
+        # start server app and when client connected adds one more client handler function for each client
+    
+    def _run_server(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(self._start_server())
+        
     async def _listClients(self):  # printing clients
         print("[", end=" ")
 
@@ -79,7 +93,7 @@ class Server:
             else:
                 _ = msg.find(' ')
                 ms = msg[:_].strip().upper()
-                tag = msg[_+1, :].strip().split()
+                tag = msg[_+1:].strip().split()
                 return (tag, ms)
 
         except Exception as e:
@@ -101,9 +115,13 @@ class Server:
         print(f"Websocket client connected from {ws.remote_address}")
         try:
             msg = await ws.recv()
-            tag, msg = await Server._parser(msg)
-            await self._mssgHandler(tag, msg, ws)
-
+            print(msg)
+            if(msg == "#INIT"):
+                msg = await ws.recv()
+                print(msg)
+                tag, msg = await Server._parser(msg)
+                await self._mssgHandler(tag, msg, ws)
+                
         except websockets.ConnectionClosed:
             await self._clientRemove(ws)
             print(f"WS Client from {ws.remote_address} disconnected")

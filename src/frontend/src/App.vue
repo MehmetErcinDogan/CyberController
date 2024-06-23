@@ -23,55 +23,75 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-const HandleConnection = () =>{
-  var ws = new WebSocket("ws://localhost:5000");
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://localhost:5000");
   
-  ws.onopen = function(){
-    console.log("Sucessfully connected . . .");
-  }
+  ws.onopen = function() {
+    console.log("Successfully connected...");
+    ws.send("#INIT");
+  };
   
-  ws.onmessage = function(event){
+  ws.onmessage = function(event) {
     console.log(event.data);
-    localStorage.setItem("msg",event.data);
-  }
+    localStorage.setItem("msg", event.data);
+    if (event.data === "#ALLOW") {
+      router.push('/');
+    } else {
+      router.push('/login');
+      console.log("onmessage");
+    }
+  };
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    router.push('/login');
+    console.log("onerror");
+  };
+  
+  ws.onclose = function() {
+    console.log("WebSocket connection closed");
+    router.push('/login');
+    console.log("onclose");
+  };
+  
   return ws;
-}
+};
 
-const sendMessage = (ws,msg) =>{
-  if(ws.readyState === WebSocket.OPEN){
-    ws.send(msg)
-    console.log(msg," is sent . . .");
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+    console.log(message, "is sent...");
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+      console.log(message, "is sent...");
+    }, { once: true });
   }
-}
+};
 
 const router = useRouter();
 onMounted(() => { 
-  try{
-    var ws = HandleConnection();
-  }catch{
-    console.log("Error at connection")
-  }
-  // Oturum durumunu kontrol et
-
-  try{
-    const id = localStorage.getItem('id');
-    if (id === ""){
-      router.push('/login');
-    }
-    
-    const msg = "#CHECK "+id;
-    sendMessage(ws,msg);
-
-    // Eğer kullanıcı daha önce giriş yapmışsa ana sayfaya yönlendir
-    if (localStorage.getItem("msg") === "#ALLOW") {
-      console.log("Already signed in")
-    } else {
-      // Kullanıcı daha önce giriş yapmamışsa login sayfasına yönlendir
-      router.push('/login');
-    }
-  }catch{
+  let ws;
+  try {
+    ws = HandleConnection();
+  } catch {
+    console.log("Error at connection");
     router.push('/login');
+    console.log("try catch");
+    return;
   }
+
+  // Oturum durumunu kontrol et
+  const id = localStorage.getItem('id');
+  localStorage.setItem('id',"dsasdas")
+  if (!id) {
+    router.push('/login');
+    console.log("no id");
+    return;
+  }
+  
+  const msg = "#CHECK " + id;
+  sendMessage(ws, msg);
 });
 </script>
 
