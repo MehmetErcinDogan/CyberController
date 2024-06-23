@@ -1,7 +1,7 @@
 <template>
   <div class="full-screen-container">
     <div class="up-container">
-      <div class="listing-devices">
+      <div class="listing-devices">.
         <h1 class="l1">Listing Devices</h1>
         <h1 class="l2" v-for="device in devices" :key="device">{{ device }}</h1>
       </div>
