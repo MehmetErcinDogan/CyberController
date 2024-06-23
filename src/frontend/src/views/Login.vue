@@ -41,7 +41,10 @@ const HandleConnection = () => {
   ws.onmessage = function(event) { // change
     console.log(event.data);
     localStorage.setItem("msg", event.data);
-    if (event.data === "#ALLOW") {
+    let params = event.data.split(" ");
+    if (params[0] === "#ALLOW") {
+      localStorage.setItem('id',params[1]);
+      console.log(params[1]);
       router.push('/home');
     } else {
       router.push('/login');

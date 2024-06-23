@@ -34,6 +34,7 @@ const HandleConnection = () => {
   ws.onmessage = function(event) {
     console.log(event.data);
     localStorage.setItem("msg", event.data);
+  
     if (event.data === "#ALLOW") {
       router.push('/');
     } else {

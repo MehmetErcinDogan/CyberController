@@ -10,15 +10,8 @@ import time
 import sys
 
 # gonna complete the another script for scheduled tasks
-# gonna think about above task
-
-# gonna check all await functions and their await keywords
 # gonna complete db
-# gonna complete the vue linkage
 # gonna complete the features
-
-# gonna add comment lines
-# make it more readable
 
 
 @dataclass
@@ -43,7 +36,7 @@ class Server:
 
     def run(self):
         print(f"Server started to listening on \"localhost:{self._port}\"")
-        server_thread = threading.Thread(target=self._run_server,daemon=True)
+        server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
         try:
@@ -55,7 +48,7 @@ class Server:
         except KeyboardInterrupt:
             print("Keyborad")
             sys.exit()
-    
+
     # start server as application
     # starts serving at new thread
 
@@ -69,7 +62,7 @@ class Server:
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self._start_server())
         # start server
-        
+
     def _listClients(self):  # printing clients
         print("[", end=" ")
 
@@ -106,29 +99,29 @@ class Server:
         except Exception as e:
             print("Error occured at parser as", e)
 
-    def _clientFindByID(self,id):
+    def _clientFindByID(self, id):
         for i in self._clients:
             if i.id == id:
                 return i
         return False
 
-    def _clientFindByWS(self,ws):
+    def _clientFindByWS(self, ws):
         for i in self._clients:
             if i.ws == ws:
                 return i
         return False
-    
+
     async def _clientHandler(self, ws):
         print(f"Websocket client connected from {ws.remote_address}")
         try:
             msg = await ws.recv()
             print(msg)
-            if(msg == "#INIT"):
+            if (msg == "#INIT"):
                 msg = await ws.recv()
                 print(msg)
                 tag, msg = Server._parser(msg)
                 await self._mssgHandler(tag, msg, ws)
-                
+
         except websockets.ConnectionClosed:
             self._clientRemove(ws)
             print(f"WS Client from {ws.remote_address} disconnected")
@@ -138,7 +131,6 @@ class Server:
 
         finally:
             self._timeoutCheck()
-            self._clientRemove(ws)
             await ws.close()
             print(f"WS Connection closed {ws.remote_address}")
 
@@ -165,21 +157,21 @@ class Server:
                 else:
                     username = tag[0]
                     password = tag[1]
-                    print(username,password)
+                    print(username, password)
                     # if self._db.checkUser(username, password):
-                    if username == "admin" and password == "admin":
-                        print("Joined")
+                    if username == "admin" and password == "admin":  # gonna remove
                         id = str(datetime.datetime.now())
                         id = id.encode()
                         id = hashlib.sha256(id)
                         id = id.hexdigest()
 
-                        client = Client(ws, id, time.time(), username, password)
+                        client = Client(ws, id, time.time(),
+                                        username, password)
 
                         self._clients.append(client)
                         # creates client at above
 
-                        await ws.send("#ALLOW")
+                        await ws.send(f"#ALLOW {id}")
                         await self._connectedClient(ws)
                     else:
                         await ws.send("#DENY")
@@ -195,12 +187,11 @@ class Server:
 
                 if msg == "#DDOS":
                     if len(tag) != 1:
-                        raise("Tag error from DDOS")
+                        raise ("Tag error from DDOS")
                     targetIP = tag[0]
                     # result = DDOS(targetIP)
                     result = []
                     ws.send(json.dump(result))
-                    
 
         except Exception as e:
             print("Error occured at connectedClient as", e)
