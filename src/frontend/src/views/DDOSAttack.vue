@@ -6,11 +6,7 @@
           <label for="target-ip">Target-IP:</label> 
           <input class="target-ip1" type="text" v-model="targetIp" id="target-ip">
         </div>
-        <div>
-          <!-- Bu kısımda ne zaman ddos atılacağı belirlenecek  -->
-          <label for="timeout">Timeout:</label>
-          <input class="time1" type="time" v-model="timeout" id="timeout">
-        </div>
+        
       </div>
       <!-- Bu buttona basıldığında yazılan target-ip ve ne zaman atılacağı bilgilerinin alınıp ddos atma fonksiyonu çalışacak.  -->
       <button class="btnstart" @click="startDDOS">Start</button>
@@ -30,7 +26,7 @@
   import { ref, computed } from 'vue';
   
   const targetIp = ref('');
-  const timeout = ref('');
+ 
   const progress = ref(0);
   const logs = ref([]);
   

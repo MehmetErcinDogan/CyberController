@@ -23,46 +23,69 @@
 import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-const HandleConnection = () =>{
-  var ws = new WebSocket("ws://localhost:5000");
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://localhost:5000");
   
-  ws.onopen = function(){
-    console.log("Sucessfully connected . . .");
-    sendMessage(ws,"Logged in");
-  }
+  ws.onopen = function() {
+    console.log("Successfully connected...");
+    ws.send("#INIT");
+  };
   
-  ws.onmessage = function(event){
+  ws.onmessage = function(event) {
     console.log(event.data);
-  }
+    localStorage.setItem("msg", event.data);
+    if (event.data === "#ALLOW") {
+      router.push('/');
+    } else {
+      router.push('/login');
+    }
+  };
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    router.push('/login');
+  };
+  
+  ws.onclose = function() {
+    console.log("WebSocket connection closed");
+    router.push('/login');
+  };
+  
   return ws;
-}
+};
 
-const sendMessage = (ws,msg) =>{
-  ws.send(msg)
-  console.log(msg," is sent . . .");
-}
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+    console.log(message, "is sent...");
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+      console.log(message, "is sent...");
+    }, { once: true });
+  }
+};
 
 const router = useRouter();
-onMounted(() => {
-  router.beforeEach((to, from, next) => {
-    localStorage.clear();
-    next();
-  });
-  try{
-    HandleConnection();
-  }catch(error){
-    console.log("There are error: ",error);
-  }
-  // Oturum durumunu kontrol et
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
-
-  // Eğer kullanıcı daha önce giriş yapmışsa ana sayfaya yönlendir
-  if (isLoggedIn) {
-    console.log("logged in");
-  } else {
-    // Kullanıcı daha önce giriş yapmamışsa login sayfasına yönlendir
+onMounted(() => { 
+  let ws;
+  try {
+    ws = HandleConnection();
+  } catch {
+    console.log("Error at connection");
     router.push('/login');
+    return;
   }
+
+  // Oturum durumunu kontrol et
+  const id = localStorage.getItem('id');
+  if (!id) {
+    router.push('/login');
+    return;
+  }
+  
+  const msg = "#CHECK " + id;
+  sendMessage(ws, msg);
 });
 </script>
 
@@ -110,7 +133,7 @@ html, body {
 .nav-links li {
   font-size: 15px;
   font-weight: bold;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Roboto Flex", sans-serif;
   white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
 }
 .nav-links li a {
