@@ -35,7 +35,7 @@ class Server:
         try:
             self._port = port
             self._clients = []
-            # self._db = Database("../data/")  # initialize or load database
+            self._db = Database("data")  # initialize or load database
 
         except Exception as e:
             print("Error occured during initialize server object as", e)
@@ -43,27 +43,34 @@ class Server:
 
     def run(self):
         print(f"Server started to listening on \"localhost:{self._port}\"")
-        server_thread = threading.Thread(target=self._run_server)
+        server_thread = threading.Thread(target=self._run_server,daemon=True)
         server_thread.start()
 
         try:
             while True:
-                pass
+                command = input("Command: ").strip().upper()
+                if command == "SHOW":
+                    self._listClients()
+
         except KeyboardInterrupt:
             print("Keyborad")
-            server_thread.join()
+            sys.exit()
+    
+    # start server as application
+    # starts serving at new thread
 
     async def _start_server(self):  # runs server
         serve = await websockets.serve(self._clientHandler, "localhost", self._port)
         await serve.wait_closed()
-        # start server app and when client connected adds one more client handler function for each client
-    
+        # and when client connected adds one more client handler function for each client
+
     def _run_server(self):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self._start_server())
+        # start server
         
-    async def _listClients(self):  # printing clients
+    def _listClients(self):  # printing clients
         print("[", end=" ")
 
         for i in self._clients:
@@ -71,7 +78,7 @@ class Server:
 
         print("]")
 
-    async def _clientRemove(self, ws):  # remove client from clien list
+    def _clientRemove(self, ws):  # remove client from clien list
         for i in self._clients:
             if i.ws == ws:
                 self._clients.remove(i)
@@ -79,13 +86,13 @@ class Server:
         return False
 
     # checks time out if user do not access more than 10 min, terminate that client
-    async def _timeoutCheck(self):
+    def _timeoutCheck(self):
         for client in self._clients:
             if ((client.recentTime - time.time()) > (10*60)):
                 client.ws.close()
                 self._clients.remove(client)
 
-    async def _parser(msg):  # parse messages
+    def _parser(msg):  # parse messages
         try:
             msg = msg.strip()
             if msg[0] != "#":
@@ -99,13 +106,13 @@ class Server:
         except Exception as e:
             print("Error occured at parser as", e)
 
-    async def _clientFindByID(self,id):
+    def _clientFindByID(self,id):
         for i in self._clients:
             if i.id == id:
                 return i
         return False
 
-    async def _clientFindByWS(self,ws):
+    def _clientFindByWS(self,ws):
         for i in self._clients:
             if i.ws == ws:
                 return i
@@ -119,19 +126,19 @@ class Server:
             if(msg == "#INIT"):
                 msg = await ws.recv()
                 print(msg)
-                tag, msg = await Server._parser(msg)
+                tag, msg = Server._parser(msg)
                 await self._mssgHandler(tag, msg, ws)
                 
         except websockets.ConnectionClosed:
-            await self._clientRemove(ws)
+            self._clientRemove(ws)
             print(f"WS Client from {ws.remote_address} disconnected")
 
         except Exception as e:
             print(f"Error occured at ws client {e} from {ws.remote_address}")
 
         finally:
-            await self._timeoutCheck()
-            await self._clientRemove(ws)
+            self._timeoutCheck()
+            self._clientRemove(ws)
             await ws.close()
             print(f"WS Connection closed {ws.remote_address}")
 
@@ -142,7 +149,7 @@ class Server:
                     raise Exception("Wrong tag value")
 
                 else:
-                    i = await self._clientFindByID(tag[0])
+                    i = self._clientFindByID(tag[0])
                     if i != False:
                         await ws.send("#ALLOW")
                         i.ws = ws
@@ -158,10 +165,10 @@ class Server:
                 else:
                     username = tag[0]
                     password = tag[1]
-                    if self._db.checkUser(username, password):
-                        # gonna create hash id and should add to list with last accsess time
-                        # complete
-
+                    print(username,password)
+                    # if self._db.checkUser(username, password):
+                    if username == "admin" and password == "admin":
+                        print("Joined")
                         id = str(datetime.datetime.now())
                         id = id.encode()
                         id = hashlib.sha256(id)
@@ -170,22 +177,21 @@ class Server:
                         client = Client(ws, id, time.time(), username, password)
 
                         self._clients.append(client)
-                        await self._listClients()
-                        # creates and lists clients at above
+                        # creates client at above
 
                         await ws.send("#ALLOW")
-                        await self._connectedClient(ws)  # change
+                        await self._connectedClient(ws)
                     else:
                         await ws.send("#DENY")
 
         except Exception as e:
             print("Error occured at msgHandler as", e)
 
-    async def _connectedClient(self, ws):  # gonna complete
+    async def _connectedClient(self, ws):
         try:
             i = self._clientFindByWS(ws)
             while True:
-                tag, msg = await Server._parser(ws.recv())
+                tag, msg = Server._parser(await ws.recv())
 
                 if msg == "#DDOS":
                     if len(tag) != 1:

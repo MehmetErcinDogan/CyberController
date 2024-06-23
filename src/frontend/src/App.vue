@@ -38,20 +38,17 @@ const HandleConnection = () => {
       router.push('/');
     } else {
       router.push('/login');
-      console.log("onmessage");
     }
   };
   
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
     router.push('/login');
-    console.log("onerror");
   };
   
   ws.onclose = function() {
     console.log("WebSocket connection closed");
     router.push('/login');
-    console.log("onclose");
   };
   
   return ws;
@@ -77,16 +74,13 @@ onMounted(() => {
   } catch {
     console.log("Error at connection");
     router.push('/login');
-    console.log("try catch");
     return;
   }
 
   // Oturum durumunu kontrol et
   const id = localStorage.getItem('id');
-  localStorage.setItem('id',"dsasdas")
   if (!id) {
     router.push('/login');
-    console.log("no id");
     return;
   }
   

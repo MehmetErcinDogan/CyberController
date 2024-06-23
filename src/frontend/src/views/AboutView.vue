@@ -5,7 +5,7 @@
         <ul class="nav-links">
           <li><router-link to="/list-lan-devices">List Lan Devices</router-link></li>
       <li><router-link to="/port-scanner">Port Scanner</router-link></li>
-      <li><router-link to="/packet-tracker">Packet Tracker</router-link></li>
+
       <li><router-link to="/task-list">Task List</router-link></li>
       <li><router-link to="/sniffer">Sniffer</router-link></li>
       <li><router-link to="/ddos-attack">DDOS Attack</router-link></li>

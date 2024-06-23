@@ -3,13 +3,10 @@
     <div class="up-container">
       <div class="listing-devices">
         <h1 class="l1">Listing Devices</h1>
-        <h1 class="l2">Device1</h1>
-        <h1 class="l2">Device2</h1>
-        <h1 class="l2">Device3</h1>
+        <h1 class="l2" v-for="device in devices" :key="device">{{ device }}</h1>
       </div>
-      <!-- Bu aşağıdaki Scan buttonu yukarıdaki Listing devices kısmında cihazları listeleyecek. Ben şuan 3 tane rastgele yazdım. -->
-       <!-- Device 1 , Device2 gibi bunları silebilirsin.  -->
-      <button class="btn-scan">Scan</button>
+      <!-- Bu aşağıdaki Scan buttonu yukarıdaki Listing devices kısmında cihazları listeleyecek. -->
+      <button class="btn-scan" @click="scanDevices">Scan</button>
     </div>
     <div class="down-container">
       <!-- Portlar için burada bir tablo oluşturdum. Aşağıda portun içeriği için bir array kullandım. -->
@@ -23,7 +20,7 @@
         </thead>
         <tbody>
           <!-- Bu bilgiler script kısmında arrayden geliyor.  -->
-           <!-- Aşağıdaki showDetails fonksiyonu portun içindeki bir elemana tıklandığında portun bilgilerinin gösterildiği bir modal açılıyor. -->
+          <!-- Aşağıdaki showDetails fonksiyonu portun içindeki bir elemana tıklandığında portun bilgilerinin gösterildiği bir modal açılıyor. -->
           <tr v-for="port in ports" :key="port.portNumber" @click="showDetails(port)">
             <td>{{ port.portNumber }}</td>
             <td>{{ port.clickStatus }}</td>
@@ -39,8 +36,7 @@
         <!-- Bu kısım seçilen porta göre modalın içeriği gösteriliyor. -->
         <span class="close" @click="closeModal">&times;</span>
         <h2 class="ptdetails">Port Details</h2>
-        
-         <!-- İstediğin daha fazla özellik varsa bunları arraye yazıp çekebilirsin. -->
+        <!-- İstediğin daha fazla özellik varsa bunları arraye yazıp çekebilirsin. -->
         <p>Packet ID: {{ selectedPort.packetId }}</p>
         <p>Packet Name: {{ selectedPort.packetName }}</p>
         <p>Port Number: {{ selectedPort.portNumber }}</p>
@@ -51,16 +47,17 @@
   </div>
 </template>
 
-
-
 <script setup>
 import { ref } from 'vue';
+
 // Bu arrayi json formatında çekilmesi gerekiyor.
 const ports = ref([
   { portNumber: '123456', clickStatus: 'clickable', able: 1 , packetId: '9974', packetName: 'Elma' },
   { portNumber: '234567', clickStatus: 'unclickable', able: 0, packetId: '9975', packetName: 'Armut'  },
   { portNumber: '345678', clickStatus: 'clickable', able: 1, packetId: '9976', packetName: 'Çilek'  },
 ]);
+
+const devices = ref([]);
 
 const selectedPort = ref(null);
 
@@ -72,9 +69,11 @@ const closeModal = () => {
   selectedPort.value = null;
 };
 
-
+const scanDevices = () => {
+  // Örnek cihaz isimleri
+  devices.value = ['Device1', 'Device2', 'Device3'];
+};
 </script>
-
 
 
 

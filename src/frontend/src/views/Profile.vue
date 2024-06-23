@@ -15,7 +15,7 @@
         <h1 class="position">Student</h1>
         <div class="label-acc">
           <div class="label-acc11">
-            <h1 class="logout-time">Time ETC</h1>
+            <h1 class="logout-time">Time UTC: {{ currentTime }}</h1>
             <h1 class="tcp-ipp">TCP IP</h1>
 
           </div>

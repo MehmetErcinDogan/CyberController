@@ -12,8 +12,8 @@
       </div>
       <div id="login-form" v-show="showLoginForm">
         <form>
-          <input type="text" placeholder="Enter email or username"/>
-          <input type="password" placeholder="Enter password"/>
+          <input type="text" id = "uname" placeholder="Enter email or username"/>
+          <input type="password" id = "pass" placeholder="Enter password"/>
           <button type="button" class="btn login" @click="handleLogin">Login</button>
         </form>
       </div>
@@ -30,9 +30,58 @@ import { useRouter } from 'vue-router';
 const canvas = ref(null);
 const router = useRouter();
 
-onMounted(() => {
-  // websocket gonna connect
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://localhost:5000");
+  
+  ws.onopen = function() {
+    console.log("Successfully connected...");
+    ws.send("#INIT");
+  };
+  
+  ws.onmessage = function(event) { // change
+    console.log(event.data);
+    localStorage.setItem("msg", event.data);
+    if (event.data === "#ALLOW") {
+      router.push('/home');
+    } else {
+      router.push('/login');
+    }
+  };
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    router.push('/login');
+  };
+  
+  ws.onclose = function() {
+    console.log("WebSocket connection closed");
+    location.reload();
+  };
+  
+  return ws;
+};
 
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+    console.log(message, "is sent...");
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+      console.log(message, "is sent...");
+    }, { once: true });
+  }
+};
+
+let ws;
+
+onMounted(() => {
+  try {
+    ws = HandleConnection();
+  } catch {
+    console.log("Error at connection");
+    router.push('/login');
+  }
 
   const c = canvas.value;
   const ctx = c.getContext('2d');
@@ -81,30 +130,24 @@ onMounted(() => {
   
 });
 
-// TO DO: Yoruma aldığım metotlar ve değişkenler gerekli mi kontrol Cevap: Kontrol ettim login sayfasındakileri yorum satırına aldıklarında toggleLogin fonksiyonu,.
-//dışındaki diğer fonksiyonlar bir şekilde etkiliyor sanırım login olmayı çünkü bu şekilde yaptığımızda login buttonuna basıldığında route etmiyor.
-// TO DO: onBeforeMount fonksitonu bir kere mi çalışıyor ve neden onMounted içinde tanımlanmış? O fonksiyonda başka işlevlerde olacak.
-//Cevap: onBeforeMount fonksiyonuna gerek yokmuş. 
-// TO DO: localStorage sıfırlanması gerekli her sayfa açıldığında app vueda başlangıçta sıfırlasın. App vue refresh edildiğinde bir daha çağrılmıyor zaten değil mi?
-// // App.vue de router.beforeEach((to, from, next) => {
-//     localStorage.clear();
-//     next();
-//   }); onMounted kısmında bunu yazdım. Bu sayede her route veya refresh edildiğinde localstorage clear yapıyor. Fakat şöyle bir sorunu var. 
-//Local storage sürekli sıfırlandığından herhangi başka bir sayfada bile olduğumuzda refresh atıldığında login sayfasına geri dönüyor.
- 
-
 // // Login related functions and variables
- const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
- const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
+const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
+const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 const showLoginForm = ref(true);//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 
 const handleLogin = async () => {
-  const isValid = await validateUsernameAndPassword();
+  await validateUsernameAndPassword();
 
 };
 
 const validateUsernameAndPassword = async () => {
-  return true; // Örnek olarak her zaman geçerli olduğunu varsayalım.
+  let query = "#SIGN";
+  let username = document.getElementById('uname').value;
+  let password = document.getElementById('pass').value;
+
+  query = query+" "+username+" "+password;
+  sendMessage(ws,query);
+  // Örnek olarak her zaman geçerli olduğunu varsayalım.
   // Bu kısma bir kullanıcı adı ve şifre kontrolü yapılacak.
 };
 

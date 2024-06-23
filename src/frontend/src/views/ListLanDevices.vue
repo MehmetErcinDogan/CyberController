@@ -1,25 +1,33 @@
 <template>
-    <div class="full-screen-container">
-        <div class="up-container">
-          <!-- Burda bir button var. Bu buttona basıldığında localdeki cihazların ip leri çıkarılacak. -->
-          <!-- Bu adresler aşağıdaki local ıp name başlıklı kısmın altında yazılacak. -->
-          
-          <button class="btn1">Button</button>
-        </div>
-        <div class="down-container">
-          <div class="alt-label">
-            
-            <div class="a2">
-              <h1 class="Lp2">Local Ip Name</h1>
-            </div>
-          </div>
-        </div>
+  <div class="full-screen-container">
+    <div class="up-container">
+      <button class="btn1" @click="getLocalIPs">Button</button>
     </div>
-
-
+    <div class="down-container">
+      <div class="alt-label">
+        <div class="a2">
+          <h1 class="Lp2">Local Ip Name</h1>
+          <ul>
+            <li class="ip1"  v-for="ip in localIPs" :key="ip">{{ ip }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
-<script>
 
+<script setup>
+import { ref } from 'vue';
+
+// IP adreslerini tutacak ref değişkeni
+const localIPs = ref([]);
+
+// IP adreslerini ekleyen fonksiyon
+const getLocalIPs = () => {
+  // Örnek IP adresleri
+  const ips = ['192.168.1.1', '192.168.1.2', '192.168.1.3'];
+  localIPs.value = ips;
+};
 </script>
 <style scoped>
 .full-screen-container {
@@ -79,6 +87,9 @@
 
 .Lp2 {
   font-size: 18px;
+  color: white;
+}
+.ip1{
   color: white;
 }
 
