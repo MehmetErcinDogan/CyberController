@@ -10,6 +10,10 @@
           <!-- Bu kısımda ne zaman ddos atılacağı belirlenecek  -->
           <label for="timeout">Timeout:</label>
           <input class="time1" type="time" v-model="timeout" id="timeout">
+          <!-- Timeout çıkarılacak -->
+                     <!-- Timeout çıkarılacak -->
+          <!-- Timeout çıkarılacak -->
+
         </div>
       </div>
       <!-- Bu buttona basıldığında yazılan target-ip ve ne zaman atılacağı bilgilerinin alınıp ddos atma fonksiyonu çalışacak.  -->

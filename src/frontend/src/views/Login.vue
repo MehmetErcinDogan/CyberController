@@ -34,7 +34,7 @@ const router = useRouter();
 
 onMounted(() => {
   // websocket gonna connect
-
+  console.log(localStorage.msg);
 
 
   const c = canvas.value;

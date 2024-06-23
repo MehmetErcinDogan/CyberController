@@ -54,6 +54,7 @@
   background-color: rgba(204, 31, 161, 0.245);
   margin: 20px 0; /* Yatay margin kaldırıldı */
   padding: 20px;
+  border-radius: 15px;
 }
 
 .a2 {

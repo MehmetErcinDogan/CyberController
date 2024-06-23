@@ -28,39 +28,48 @@ const HandleConnection = () =>{
   
   ws.onopen = function(){
     console.log("Sucessfully connected . . .");
-    sendMessage(ws,"Logged in");
   }
   
   ws.onmessage = function(event){
     console.log(event.data);
+    localStorage.setItem("msg",event.data);
   }
   return ws;
 }
 
 const sendMessage = (ws,msg) =>{
-  ws.send(msg)
-  console.log(msg," is sent . . .");
+  if(ws.readyState === WebSocket.OPEN){
+    ws.send(msg)
+    console.log(msg," is sent . . .");
+  }
 }
 
 const router = useRouter();
-onMounted(() => {
-  router.beforeEach((to, from, next) => {
-    localStorage.clear();
-    next();
-  });
+onMounted(() => { 
   try{
-    HandleConnection();
-  }catch(error){
-    console.log("There are error: ",error);
+    var ws = HandleConnection();
+  }catch{
+    console.log("Error at connection")
   }
   // Oturum durumunu kontrol et
-  const isLoggedIn = localStorage.getItem('isLoggedIn');
 
-  // Eğer kullanıcı daha önce giriş yapmışsa ana sayfaya yönlendir
-  if (isLoggedIn) {
-    console.log("logged in");
-  } else {
-    // Kullanıcı daha önce giriş yapmamışsa login sayfasına yönlendir
+  try{
+    const id = localStorage.getItem('id');
+    if (id === ""){
+      router.push('/login');
+    }
+    
+    const msg = "#CHECK "+id;
+    sendMessage(ws,msg);
+
+    // Eğer kullanıcı daha önce giriş yapmışsa ana sayfaya yönlendir
+    if (localStorage.getItem("msg") === "#ALLOW") {
+      console.log("Already signed in")
+    } else {
+      // Kullanıcı daha önce giriş yapmamışsa login sayfasına yönlendir
+      router.push('/login');
+    }
+  }catch{
     router.push('/login');
   }
 });
@@ -110,7 +119,7 @@ html, body {
 .nav-links li {
   font-size: 15px;
   font-weight: bold;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Roboto Flex", sans-serif;
   white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
 }
 .nav-links li a {

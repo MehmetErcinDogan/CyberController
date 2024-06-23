@@ -115,6 +115,7 @@ const closeModal = () => {
   align-items: center;
   margin-bottom: 20px; /* Aradaki mesafeyi azaltmak için */
   
+  
   padding: 0 5%;
 
 }
@@ -127,6 +128,7 @@ const closeModal = () => {
   align-items: center;
   margin-bottom: 10%;
   position: relative; /* Search button'u hizalamak için relative konumlandırma */
+  border-radius: 10px;
   
   
   
@@ -142,6 +144,7 @@ const closeModal = () => {
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
+  border-radius: 10px;
 
 }
 
@@ -150,7 +153,7 @@ const closeModal = () => {
   height: 100%;
   border-collapse: collapse;
   background-color: rgba(204, 31, 161, 0.245);
-  border-radius: 5px;
+  border-radius: 15px;
   
   margin-right: 60%;
 }
@@ -162,6 +165,7 @@ const closeModal = () => {
   text-align: center;
   color: white;
   font-family: "Roboto Flex", sans-serif;
+  
 }
 
 .ports-table th {
