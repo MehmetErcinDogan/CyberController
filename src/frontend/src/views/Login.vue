@@ -38,7 +38,7 @@ const HandleConnection = () => {
     ws.send("#INIT");
   };
   
-  ws.onmessage = function(event) { // change
+  ws.onmessage = function(event) {
     console.log(event.data);
     localStorage.setItem("msg", event.data);
     let params = event.data.split(" ");

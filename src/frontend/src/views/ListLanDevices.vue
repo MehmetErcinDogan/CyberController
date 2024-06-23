@@ -17,17 +17,79 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 // IP adreslerini tutacak ref değişkeni
 const localIPs = ref([]);
 
-// IP adreslerini ekleyen fonksiyon
-const getLocalIPs = () => {
-  // Örnek IP adresleri
-  const ips = ['192.168.1.1', '192.168.1.2', '192.168.1.3'];
-  localIPs.value = ips;
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://localhost:5000");
+  
+  ws.onopen = function() {
+    console.log("Successfully connected...");
+    ws.send("#INIT");
+  };
+  
+  ws.onmessage = function(event) { 
+    if (event.data === "#ALLOW"){
+      console.log(event.data);
+    }else if(event.data == "#DENY"){
+      router.push("/login");
+    }else{
+      let msg = JSON.parse(event.data)
+      localStorage.setItem("msg", msg);
+      console.log(msg);
+      localIPs.value = msg;
+    }
+    
+  };
+
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    router.push('/');
+  };
+  
+  ws.onclose = function() {
+    console.log("WebSocket connection closed");
+  };
+  
+  return ws;
 };
+
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+    console.log(message, "is sent...");
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+      console.log(message, "is sent...");
+    }, { once: true });
+  }
+};
+
+let ws;
+
+onMounted(()=>{
+  try{
+    ws = HandleConnection();
+    sendMessage(ws,"#CHECK "+localStorage.id);
+  }catch{
+    console.log("Error handeled");
+  }
+});
+
+// IP adreslerini getiren fonksiyon
+const getLocalIPs = () => {
+  // location.reload();
+  try{
+    sendMessage(ws,"#LISTDEVICES ");
+  } catch{
+    console.log("Error at getLocalIPs");
+  }
+};
+
 </script>
 <style scoped>
 .full-screen-container {
