@@ -1,4 +1,5 @@
 from lib.server import Server
+import pyuac
 import sys
 
 if __name__ == "__main__":

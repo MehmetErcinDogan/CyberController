@@ -114,7 +114,7 @@
   }
   
   .data-table th {
-    background-color: #2b2727;
+    background-color: #d69fd2;
     text-align: left;
   }
   

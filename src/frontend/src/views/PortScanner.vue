@@ -176,7 +176,7 @@ const scanDevices = () => {
 }
 
 .ports-table th {
-  background-color: #075df1;
+  background-color: #d69fd2;
   color: white;
 }
 

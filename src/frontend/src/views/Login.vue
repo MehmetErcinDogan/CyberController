@@ -195,6 +195,7 @@ canvas {
   background:#fff;
   transition:0.2s;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .btn {
   border-radius: 20px;
@@ -207,11 +208,13 @@ canvas {
   margin-bottom:0.5em;
   margin-top:0.5em;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .login {
   background:#57b846;
   color:#fff;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .login:hover {
   background:#222;
@@ -234,6 +237,7 @@ canvas {
   border-top-left-radius: 20px;
   background: linear-gradient(135deg, #153677, #4e085f);
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-toggle button:nth-child(1) {
   border-bottom-right-radius: 20px;
@@ -245,6 +249,7 @@ canvas {
   background:#57b846;
   color:#ffff;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal form {
   position: relative;
@@ -278,6 +283,7 @@ canvas {
   font-weight: bold;
   transition:0.4s;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal input:focus , .form-modal input:active {
   transform:scaleX(1.02);

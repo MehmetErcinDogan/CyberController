@@ -122,10 +122,13 @@ html, body {
   width: 100%;
   display: flex;
   justify-content: space-between; /* Linklerin arasındaki boşluğu dinamik olarak ayarlar */
-  background-color: #222;
+  background-color: none;
   padding: 15px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
+}
+.navbar:hover{
+  background-color: #222;
 }
 .nav-links {
   display: flex;
@@ -137,7 +140,7 @@ html, body {
 }
 .nav-links li {
   font-size: 15px;
-  font-weight: bold;
+  font-weight: bolder;
   font-family: "Roboto Flex", sans-serif;
   white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
   font-style: italic;

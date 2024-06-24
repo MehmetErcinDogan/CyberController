@@ -1,57 +1,56 @@
 <template>
-    <div class="container">
-      <div class="ddos-components">
-        <div>
-          <!-- Bu kısım da kullanıcıdan bir target-ip alınacak  -->
-          <label for="target-ip">Target-IP:</label> 
-          <input class="target-ip1" type="text" v-model="targetIp" id="target-ip">
-        </div>
-        
+  <div class="container">
+    <div class="ddos-components">
+      <div>
+        <!-- Bu kısım da kullanıcıdan bir target-ip alınacak  -->
+        <label for="target-ip">Target-IP:</label> 
+        <input class="target-ip1" type="text" v-model="targetIp" id="target-ip">
       </div>
       <!-- Bu buttona basıldığında yazılan target-ip ve ne zaman atılacağı bilgilerinin alınıp ddos atma fonksiyonu çalışacak.  -->
       <button class="btnstart" @click="startDDOS">Start</button>
-      <div class="progressbar-container">
-        <div class="progressbar" :style="progressStyle">{{ progress }}%</div>
-      </div>
-      <!-- Bu log kısmı bizim görmek ddos atılırken görmek istediğimiz kısımları göstericek. -->
-      <div class="log-container">
-        <div class="log">
-          <div v-for="(log, index) in logs" :key="index">{{ log }}</div>
-        </div>
+    </div>
+    <div class="progressbar-container">
+      <div class="progressbar" :style="progressStyle">{{ progress }}%</div>
+    </div>
+    <!-- Bu log kısmı bizim ddos atılırken görmek istediğimiz kısımları gösterecek. -->
+    <div class="log-container">
+      <div class="log">
+        <div v-for="(log, index) in logs" :key="index">{{ log }}</div>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, computed } from 'vue';
-  
-  const targetIp = ref('');
- 
-  const progress = ref(0);
-  const logs = ref([]);
-  
-  const progressStyle = computed(() => ({
-    width: `${progress.value}%`,
-    backgroundColor: progress.value === 100 ? 'green' : 'red'
-  }));
-  
-  const startDDOS = () => {
-    logs.value.push(`Started DDOS attack on ${targetIp.value}`);
-    progress.value = 0;
-    const interval = setInterval(() => {
-      if (progress.value < 100) {
-        progress.value++;
-        logs.value.push(`DDOS attack in progress on ${targetIp.value}... (${progress.value}%)`);
-      } else {
-        clearInterval(interval);
-        logs.value.push(`DDOS attack on ${targetIp.value} completed.`);
-      }
-    }, 200); // 20 saniye için her %1 artış 200 ms sürer.
-  };
-  </script>
-  
-  <style scoped>
-  .container {
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+
+const targetIp = ref('');
+
+const progress = ref(0);
+const logs = ref([]);
+
+const progressStyle = computed(() => ({
+  width: `${progress.value}%`,
+  backgroundColor: progress.value === 100 ? 'green' : 'red'
+}));
+
+const startDDOS = () => {
+  logs.value.push(`Started DDOS attack on ${targetIp.value}`);
+  progress.value = 0;
+  const interval = setInterval(() => {
+    if (progress.value < 100) {
+      progress.value++;
+      logs.value.push(`DDOS attack in progress on ${targetIp.value}... (${progress.value}%)`);
+    } else {
+      clearInterval(interval);
+      logs.value.push(`DDOS attack on ${targetIp.value} completed.`);
+    }
+  }, 200); // 20 saniye için her %1 artış 200 ms sürer.
+};
+</script>
+
+<style scoped>
+.container {
   position: relative;
   width: 100vw; /* Ekran genişliği kadar */
   height: 100vh; /* Ekran yüksekliği kadar */
@@ -76,7 +75,8 @@
 
 .ddos-components {
   display: flex;
-  gap: 20%;
+  align-items: center;
+  gap: 20px;
   margin-top: 100px;
   color: white;
   font-size: 20px;
@@ -120,8 +120,6 @@
 }
 
 .btnstart {
-  margin-top: 20px;
-  margin-left: 80%;
   border: none;
   outline: none;
   padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
@@ -190,6 +188,4 @@
   font-family: "Roboto Flex", sans-serif;
   font-style: italic;
 }
-  </style>
-  
-  
+</style>

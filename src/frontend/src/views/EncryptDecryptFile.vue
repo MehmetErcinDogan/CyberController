@@ -110,6 +110,7 @@
   }
   
   .radio-buttons {
+    margin-top: 30px;
     display: flex;
     align-items: center;
     gap: 10px;
