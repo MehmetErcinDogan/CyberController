@@ -79,7 +79,7 @@
   gap: 20%;
   margin-top: 100px;
   color: white;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
 }
