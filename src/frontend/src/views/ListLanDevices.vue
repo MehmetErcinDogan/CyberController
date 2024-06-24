@@ -173,6 +173,8 @@ const getLocalIPs = () => {
 }
 .o1{
   color: white;
+  
+
 }
 
 .ip-table tbody tr {
