@@ -6,16 +6,26 @@
     <div class="down-container">
       <div class="alt-label">
         <div class="a2">
-          <h1 class="Lp2">Local Ip Name</h1>
-          <ul>
-            <li class="ip1"  v-for="ip in localIPs" :key="ip">{{ ip }}</li>
-          </ul>
+          
+          <table class="ip-table">
+            <thead>
+              <tr class="table-header">
+                <th>Local IP</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="o1" v-for="item in localIPs" :key="item.ip">
+                <td>{{ item.ip }}</td>
+                <td>{{ item.name }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref } from 'vue';
 
@@ -33,18 +43,17 @@ const HandleConnection = () => {
   ws.onmessage = function(event) { 
     if (event.data === "#ALLOW"){
       console.log(event.data);
-    }else if(event.data == "#DENY"){
+    } else if (event.data === "#DENY"){
       router.push("/login");
-    }else{
-      let msg = JSON.parse(event.data)
+    } else {
+      let msg = JSON.parse(event.data);
       localStorage.setItem("msg", msg);
       console.log(msg);
-      localIPs.value = msg;
+      localIPs.value = msg.map(item => ({ ip: item[0], name: item[1] }));
     }
     
   };
 
-  
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
     router.push('/');
@@ -75,17 +84,16 @@ onMounted(()=>{
   try{
     ws = HandleConnection();
     sendMessage(ws,"#CHECK "+localStorage.id);
-  }catch{
-    console.log("Error handeled");
+  } catch {
+    console.log("Error handled");
   }
 });
 
 // IP adreslerini getiren fonksiyon
 const getLocalIPs = () => {
-  // location.reload();
   try{
     sendMessage(ws,"#LISTDEVICES ");
-  } catch{
+  } catch {
     console.log("Error at getLocalIPs");
   }
 };
@@ -106,23 +114,23 @@ const getLocalIPs = () => {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin: 5% 5%; /* Dinamik marjin için yüzde kullanımı */
+  margin: 5% 5%;
 }
 
 .down-container {
   display: flex;
-  justify-content: center; /* Ortalamak için center kullanımı */
+  justify-content: center;
   align-items: center;
   flex-grow: 1;
-  width: 100%; /* Full width */
+  width: 100%;
 }
 
 .alt-label {
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
+  width: 100%;
+  height: 100%;
   border-radius: 5px;
   background-color: rgba(204, 31, 161, 0.245);
-  margin: 20px 0; /* Yatay margin kaldırıldı */
+  margin: 20px 0;
   padding: 20px;
   border-radius: 15px;
 }
@@ -139,7 +147,7 @@ const getLocalIPs = () => {
   padding: 8px 20px;
   background: #ff5945;
   color: #fff;
-  font-size: 18px; /* Daha küçük font boyutu */
+  font-size: 18px;
   cursor: pointer;
   border-radius: 15px;
   transition: background 0.3s ease;
@@ -151,35 +159,54 @@ const getLocalIPs = () => {
   font-size: 18px;
   color: white;
 }
-.ip1{
+
+.ip-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table-header {
+  background-color: #45abff;
   color: white;
+  font-weight: bold;
+}
+.o1{
+  color: white;
+}
+
+.ip-table tbody tr {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ip-table td, .ip-table th {
+  padding: 10px;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
   .up-container {
-    margin: 5% 10%; /* Daha küçük cihazlar için marjin ayarlaması */
-    justify-content: center; /* Butonu ortalamak için center kullanımı */
+    margin: 5% 10%;
+    justify-content: center;
   }
 
   .btn1 {
-    font-size: 16px; /* Daha küçük cihazlar için font boyutunu ayarlama */
+    font-size: 16px;
     height: 40px;
     padding: 5px 15px;
   }
 
   .down-container {
-    margin: 10px 0; /* Daha küçük cihazlar için marjin ayarlaması */
+    margin: 10px 0;
   }
 
   .alt-label {
-    width: 100%; /* Full width */
-    height: auto; /* Yüksekliği içeriğe göre ayarla */
+    width: 100%;
+    height: auto;
   }
 
   .a2 {
     font-size: 16px;
   }
 }
-
-
 </style>
