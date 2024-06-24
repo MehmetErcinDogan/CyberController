@@ -43,14 +43,10 @@ const HandleConnection = () => {
   
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
     router.push('/login');
   };
   
   ws.onclose = function() {
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
     router.push('/login');
   };
   

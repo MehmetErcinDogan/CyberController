@@ -51,124 +51,87 @@
         
       </div>
     </div>
-    <div class="Order">
-      <h1 class="o1">Order</h1>
-      <h2>Menü</h2>
-      <div class="menu-components">
-        <!-- Burası order menüsü kısmı burda kullanıcı tarih,saat ve işlem seçicek. -->
-        <div>
-          <label class="tarih1" for="tarih">Tarih:</label>
-          <input class="tarih1"type="date" v-model="tarih" id="tarih">
-        </div>
-        <div>
-          <label class="saat1" for="saat">Saat:</label>
-          <input class="saat1"type="time" v-model="saat" id="saat">
-        </div>
-        <div>
-          <label class="islem1" for="islem">İşlem:</label>
-          <select class="islem1"v-model="islem" id="islem">
-            <option class="islem1" value="" disabled>İşlem seçin</option>
-            <option class="islem1" value="DDOS ATTACK">DDOS ATTACK</option>
-            <option class="islem1" value="SESSION ATTACK">SESSION ATTACK</option>
-          </select>
-        </div>
-        <div>
-          <label class="isim1"for="isim">İsim:</label>
-          <input class="isim1"type="text" v-model="isim" id="isim">
-        </div>
-        <!-- Bu kaydet buttonu ile işlem kaydedilecek. -->
-        <button class="kaydet1"@click="kaydet">Kaydet</button>
-      </div>
-      <div class="down-order">
-        <div class="label1">
-          <h1>İşlem Listesi</h1>
-          <ul>
-            <!-- Kaydedilen kayıtlar bu kısımda gösterilecek. -->
-            <li class="record1" v-for="(record, index) in kayitlar" :key="index" @click="selectKayit(index)">
-              <span :class="{'selected': selectedKayitIndex === index}">{{ record }}</span>
-            </li>
-          </ul>
-        </div>
-        <!-- Bu button sayesinde seçilen kayıtlar silinecek. -->
-        <button class="btndelete1" @click="sil">Sil</button>
-      </div>
-    </div>
+    
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const showUploadPopup = ref(false);
-const fileList = ref([]);
+import router from '@/router';
+import { onMounted, ref } from 'vue'
 
-const tarih = ref('');
-const saat = ref('');
-const islem = ref('');
-const isim = ref('');
-const sonuc = ref('');
+let ws;
 
-const kayitlar = ref([]);
-const selectedKayitIndex = ref(null);
+
+
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://172.16.0.229:5000");
+  
+  ws.onopen = function() {
+    ws.send("#INIT");
+  };
+  
+  ws.onmessage = function(event) {
+    localStorage.setItem("msg", event.data);
+    let params = event.data.split(" ");
+    if (params[0] === "#ALLOW") {
+      //pass
+    } else if(params[0] === "#DENY"){
+      localStorage.setItem('auth',false);
+      localStorage.setItem('id',null);
+      router.push('/login');
+    }else{
+
+    }
+  };
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    localStorage.setItem('auth',false);
+    localStorage.setItem('id',null);
+    router.push('/login');
+  };
+  
+  ws.onclose = function() {
+    localStorage.setItem('auth',false);
+    localStorage.setItem('id',null);
+    location.reload();
+  };
+  
+  return ws;
+};
+
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+    }, { once: true });
+  }
+};
+
+onMounted(()=>{
+  try{
+    ws = HandleConnection();
+  }catch(error){
+    console.log("Error at onmounted");
+    router.push("/");
+  }
+  sendMessage("#GETPROFILE");
+});
 
 // Bu fonksiyon order kısmında yeni kayıtları kaydedicek.
-const kaydet = () => {
-  const yeniKayit = `Tarih: ${tarih.value}, Saat: ${saat.value}, İşlem: ${islem.value}, İsim: ${isim.value}`;
-  kayitlar.value.push(yeniKayit);
-  tarih.value = '';
-  saat.value = '';
-  islem.value = '';
-  isim.value = '';
-  selectedKayitIndex.value = null;  // Reset the selected index after saving a new record
-};
-//Bu fonksiyon ile kayıtlardan biri seçilebilecek.
-const selectKayit = (index) => {
-  selectedKayitIndex.value = index;
-};
-//Seçilen order silinecek.
-const sil = () => {
-  if (selectedKayitIndex.value !== null) {
-    kayitlar.value.splice(selectedKayitIndex.value, 1);
-    selectedKayitIndex.value = null;
-  }
-};
-//Pop-up menüyü açıyor.
-function toggleUploadPopup() {
-  showUploadPopup.value = !showUploadPopup.value;
-}
 
-function handleFileUpload(event) {
-  const files = event.target.files;
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const fileObject = {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      url: URL.createObjectURL(file)
-    };
-    fileList.value.push(fileObject);
-  }
-}
 
-function isImage(file) {
-  return file.type.startsWith('image');
-}
 
-function downloadFile(file) {
-  // Dosya indirme işlemi burada gerçekleştirilebilir
-  console.log('Dosya indiriliyor:', file.name);
-}
 
-function formatSize(bytes) {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 Byte';
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-}
-//Dosya yüklemek için açılan pop-up menüyü kapatıyor.
-function closeUploadPopup() {
-  showUploadPopup.value = false;
-}
+
+
+
+
+
+
+
 //Problemlerin bulunduğu array
 const problems = ref([
   { problem: 'Problem1', name: 'Name1' },
@@ -323,7 +286,7 @@ const logout = () => {
 .History{
     margin-left: 50px;
     width: 100%;
-    height: 500px;
+    height: 100%;
     border-radius: 5px;
     background: linear-gradient(90deg,#00f2ff,#f17c9e);
     border-radius: 15px;

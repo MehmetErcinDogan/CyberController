@@ -30,8 +30,6 @@ class Server:
         try:
             self._port = port
             self._clients = []
-            # self._db = Database("data")  # initialize or load database
-            self._db = Database()  # initialize or load database
 
         except Exception as e:
             print("Error occured during initialize server object as", e)
@@ -71,6 +69,7 @@ class Server:
         # and when client connected adds one more client handler function for each client
 
     def _run_server(self):
+        self._db = Database("data")  # initialize or load database
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self._start_server())

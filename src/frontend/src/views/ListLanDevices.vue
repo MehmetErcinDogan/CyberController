@@ -45,8 +45,6 @@ const HandleConnection = () => {
     if(event.data == "#ALLOW"){
       //pass
     }else if (event.data === "#DENY"){
-      localStorage.setItem('id',null);
-      localStorage.setItem('auth',false);
       router.push("/login");
     } else {
       let msg = JSON.parse(event.data);
@@ -60,13 +58,7 @@ const HandleConnection = () => {
     console.log("WebSocket error: ", error);
     router.push('/');
   };
-  
-  ws.onclose = function(event){
-    ws.close();
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
-    router.push("/login");
-  }
+
   return ws;
 };
 

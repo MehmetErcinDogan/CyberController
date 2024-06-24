@@ -61,8 +61,6 @@ const HandleConnection = () => {
   };
   
   ws.onclose = function() {
-    localStorage.setItem('auth',false);
-    localStorage.setItem('id',null);
     location.reload();
   };
   
