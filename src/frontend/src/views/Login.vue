@@ -14,7 +14,7 @@
         <form>
           <input type="text" id = "uname" placeholder="Enter email or username"/>
           <input type="password" id = "pass" placeholder="Enter password"/>
-          <button type="button" class="btn login" @click="handleLogin">Login</button>
+          <button type="button" class="btn login" @click="validateUsernameAndPassword">Login</button>
         </form>
       </div>
     </div>
@@ -24,40 +24,45 @@
 
 <script setup>
 
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import CryptoJS from 'crypto-js';
 
+let ws;
 const canvas = ref(null);
 const router = useRouter();
 
 const HandleConnection = () => {
-  const ws = new WebSocket("ws://localhost:5000");
+  const ws = new WebSocket("ws://172.16.0.229:5000");
   
   ws.onopen = function() {
-    console.log("Successfully connected...");
     ws.send("#INIT");
   };
   
   ws.onmessage = function(event) {
-    console.log(event.data);
     localStorage.setItem("msg", event.data);
     let params = event.data.split(" ");
     if (params[0] === "#ALLOW") {
       localStorage.setItem('id',params[1]);
-      console.log(params[1]);
+      localStorage.setItem('auth',true);
       router.push('/home');
     } else {
+      localStorage.setItem('auth',false);
+      localStorage.setItem('id',null);
       router.push('/login');
     }
   };
   
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
+    localStorage.setItem('auth',false);
+    localStorage.setItem('id',null);
     router.push('/login');
   };
   
   ws.onclose = function() {
-    console.log("WebSocket connection closed");
+    localStorage.setItem('auth',false);
+    localStorage.setItem('id',null);
     location.reload();
   };
   
@@ -67,18 +72,15 @@ const HandleConnection = () => {
 const sendMessage = (ws, message) => {
   if (ws.readyState === WebSocket.OPEN) {
     ws.send(message);
-    console.log(message, "is sent...");
   } else {
     ws.addEventListener('open', () => {
       ws.send(message);
-      console.log(message, "is sent...");
     }, { once: true });
   }
 };
 
-let ws;
-
 onMounted(() => {
+  localStorage.setItem('auth',false);
   try {
     ws = HandleConnection();
   } catch {
@@ -138,16 +140,11 @@ const loginBgColor = ref('#57B846'); //Bu kısım login ekranının tasarımı i
 const loginColor = ref('#fff');//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 const showLoginForm = ref(true);//Bu kısım login ekranının tasarımı için yazılmış yani gerekli.
 
-const handleLogin = async () => {
-  await validateUsernameAndPassword();
-
-};
-
 const validateUsernameAndPassword = async () => {
   let query = "#SIGN";
   let username = document.getElementById('uname').value;
   let password = document.getElementById('pass').value;
-
+  password = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
   query = query+" "+username+" "+password;
   sendMessage(ws,query);
   // Örnek olarak her zaman geçerli olduğunu varsayalım.
@@ -198,6 +195,7 @@ canvas {
   background:#fff;
   transition:0.2s;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .btn {
   border-radius: 20px;
@@ -210,11 +208,13 @@ canvas {
   margin-bottom:0.5em;
   margin-top:0.5em;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .login {
   background:#57b846;
   color:#fff;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal .login:hover {
   background:#222;
@@ -237,6 +237,7 @@ canvas {
   border-top-left-radius: 20px;
   background: linear-gradient(135deg, #153677, #4e085f);
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-toggle button:nth-child(1) {
   border-bottom-right-radius: 20px;
@@ -248,6 +249,7 @@ canvas {
   background:#57b846;
   color:#ffff;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal form {
   position: relative;
@@ -281,6 +283,7 @@ canvas {
   font-weight: bold;
   transition:0.4s;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 .form-modal input:focus , .form-modal input:active {
   transform:scaleX(1.02);

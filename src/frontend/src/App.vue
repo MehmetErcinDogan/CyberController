@@ -23,31 +23,34 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const HandleConnection = () => {
-  const ws = new WebSocket("ws://localhost:5000");
+  const ws = new WebSocket("ws://172.16.0.229:5000");
   
   ws.onopen = function() {
-    console.log("Successfully connected...");
     ws.send("#INIT");
   };
   
   ws.onmessage = function(event) {
-    console.log(event.data);
     localStorage.setItem("msg", event.data);
   
     if (event.data === "#ALLOW") {
       router.push('/');
     } else {
+      localStorage.setItem('id',null);
+      localStorage.setItem('auth',false);
       router.push('/login');
     }
   };
   
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
+    localStorage.setItem('id',null);
+    localStorage.setItem('auth',false);
     router.push('/login');
   };
   
   ws.onclose = function() {
-    console.log("WebSocket connection closed");
+    localStorage.setItem('id',null);
+    localStorage.setItem('auth',false);
     router.push('/login');
   };
   
@@ -57,11 +60,9 @@ const HandleConnection = () => {
 const sendMessage = (ws, message) => {
   if (ws.readyState === WebSocket.OPEN) {
     ws.send(message);
-    console.log(message, "is sent...");
   } else {
     ws.addEventListener('open', () => {
       ws.send(message);
-      console.log(message, "is sent...");
     }, { once: true });
   }
 };
@@ -73,6 +74,8 @@ onMounted(() => {
     ws = HandleConnection();
   } catch {
     console.log("Error at connection");
+    localStorage.setItem('id',null);
+    localStorage.setItem('auth',false);
     router.push('/login');
     return;
   }
@@ -80,6 +83,8 @@ onMounted(() => {
   // Oturum durumunu kontrol et
   const id = localStorage.getItem('id');
   if (!id) {
+    localStorage.setItem('id',null);
+    localStorage.setItem('auth',false);
     router.push('/login');
     return;
   }
@@ -96,7 +101,7 @@ onMounted(() => {
   padding: 0;
 }
 html, body {
-  background: linear-gradient(135deg, #153677, #4e085f);
+  background: linear-gradient(135deg, #2bcac4, #c82b9f);
   padding: 0;
   
   margin: 0;
@@ -117,10 +122,13 @@ html, body {
   width: 100%;
   display: flex;
   justify-content: space-between; /* Linklerin arasındaki boşluğu dinamik olarak ayarlar */
-  background-color: #222;
+  background-color: none;
   padding: 15px 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
+}
+.navbar:hover{
+  background-color: #222;
 }
 .nav-links {
   display: flex;
@@ -132,9 +140,10 @@ html, body {
 }
 .nav-links li {
   font-size: 15px;
-  font-weight: bold;
+  font-weight: bolder;
   font-family: "Roboto Flex", sans-serif;
   white-space: nowrap; /* Metinlerin alt alta gelmesini engeller */
+  font-style: italic;
 }
 .nav-links li a {
   color: #fff;

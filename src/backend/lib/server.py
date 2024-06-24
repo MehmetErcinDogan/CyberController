@@ -5,9 +5,11 @@ import websockets
 import datetime
 import hashlib
 import asyncio
+import socket
 import json
 import time
 import sys
+import os
 
 # gonna complete the another script for scheduled tasks
 # gonna complete db
@@ -28,14 +30,16 @@ class Server:
         try:
             self._port = port
             self._clients = []
-            self._db = Database("data")  # initialize or load database
+            # self._db = Database("data")  # initialize or load database
+            self._db = Database()  # initialize or load database
 
         except Exception as e:
             print("Error occured during initialize server object as", e)
             sys.exit()
 
     def run(self):
-        print(f"Server started to listening on \"localhost:{self._port}\"")
+        print(
+            f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
         server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
@@ -44,16 +48,25 @@ class Server:
                 command = input("Command: ").strip().upper()
                 if command == "SHOW":
                     self._listClients()
-
+                elif command == "EXIT":
+                    sys.exit()
+                elif command == "CLS":
+                    os.system("cls")
+                elif command == "KICK":
+                    try:
+                        ind = int(input("Index:"))
+                        self._clients.pop(ind)
+                    except Exception as e:
+                        print("Error at KICK as", e)
         except KeyboardInterrupt:
-            print("Keyborad")
+            print("Keyborad Interrupt")
             sys.exit()
 
     # start server as application
     # starts serving at new thread
 
     async def _start_server(self):  # runs server
-        serve = await websockets.serve(self._clientHandler, "localhost", self._port)
+        serve = await websockets.serve(self._clientHandler, socket.gethostbyname(socket.gethostname()), self._port)
         await serve.wait_closed()
         # and when client connected adds one more client handler function for each client
 
@@ -67,7 +80,8 @@ class Server:
         print("[", end=" ")
 
         for i in self._clients:
-            print(i.id, end=" ")
+            print("Address:", i.ws.remote_address, end="\t")
+            print("ID:", i.id, end=" , ")
 
         print("]")
 
@@ -153,16 +167,14 @@ class Server:
                     else:
                         await ws.send("#DENY")
 
-            elif msg == "#SIGN":  # SIGN username password
+            elif msg == "#SIGN":  # SIGN with username password
                 if len(tag) != 2:
                     raise Exception("Wrong tag value")
 
                 else:
                     username = tag[0]
                     password = tag[1]
-                    print(username, password)
-                    # if self._db.checkUser(username, password):
-                    if username == "admin" and password == "admin":  # gonna remove
+                    if self._db.checkUser(username, password):
                         id = str(datetime.datetime.now())
                         id = id.encode()
                         id = hashlib.sha256(id)
@@ -186,17 +198,13 @@ class Server:
         try:
             i = self._clientFindByWS(ws)
             while True:
-                tag, msg = Server._parser(await ws.recv())
-                print(msg)
-                if msg == "#LISTDEVICES":
-                    await ws.send(json.dumps([("192.168.1.1","ercin"),("192.168.1.2","can")]))
-                elif msg == "#DDOS":
-                    if len(tag) != 1:
-                        raise ("Tag error from DDOS")
-                    targetIP = tag[0]
-                    # result = DDOS(targetIP)
-                    result = []
-                    ws.send(json.dump(result))
+                if i not in self._clients:
+                    await ws.close()
+                    break
+                else:
+                    tag, msg = Server._parser(await ws.recv())
+                    if msg == "#LISTDEVICES":
+                        await ws.send(json.dumps([("192.168.1.1", "ercin"), ("192.168.1.2", "can")]))
 
         except Exception as e:
             print("Error occured at connectedClient as", e)

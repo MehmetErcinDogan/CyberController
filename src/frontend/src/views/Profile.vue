@@ -15,7 +15,7 @@
         <h1 class="position">Student</h1>
         <div class="label-acc">
           <div class="label-acc11">
-            <h1 class="logout-time">Time UTC: {{ currentTime }}</h1>
+            
             <h1 class="tcp-ipp">TCP IP</h1>
 
           </div>
@@ -47,28 +47,8 @@
             <button class="delete" @click="deleteItem">Delete</button>
           </div>
         </div>
-        <div class="Storage">
-          <h1 class="Storage1">Storage</h1>
-        </div>
-        <div class="menu">
-          <!-- Burda bir button var upload files adında bizim back-end de oluşturduğumuz storage kısmına burdan dosya yüklüyoruz. -->
-          <button class="btnpopup" @click="toggleUploadPopup">Upload Files</button>
-          <div class="modal" v-if="showUploadPopup">
-            <div class="modal-content">
-              <button class="close-btn" @click="closeUploadPopup">Close</button>
-              <input type="file" @change="handleFileUpload" multiple>
-              <ul>
-                <li v-for="file in fileList" :key="file.name">
-                  <span>{{ file.name }} - {{ formatSize(file.size) }}</span>
-                  <button @click="downloadFile(file)">Download</button>
-                  <span v-if="isImage(file)">
-                    <img :src="file.url" :alt="file.name" style="max-width: 100px;">
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        
+        
       </div>
     </div>
     <div class="Order">
@@ -268,16 +248,18 @@ const logout = () => {
     
 }
 .profile-photo{
-    margin-top: 50px;
+    
     scale: 0.4;
     
 }
 .other-profile-info{
-    margin-top: 150px;
+    margin-top: 100px;
     display: flex;
     gap: 20px;
     font-size: 12px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
+
 
     
 
@@ -289,16 +271,18 @@ const logout = () => {
     width: 300px;
     height: 100px;
     border-radius: 5px;
-    background-color: rgba(204, 31, 161, 0.245);
+    
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
 
   margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+   /* Listing Devices başlığını bir miktar aşağı kaydır */
   display: flex;
 }
 .label-acc11{
   font-size: 10px;
+  font-style: italic;
 }
 .logout {
     margin-left: 40%;
@@ -313,6 +297,7 @@ const logout = () => {
     transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
     height: 30px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
 }
 
@@ -340,12 +325,14 @@ const logout = () => {
     width: 100%;
     height: 500px;
     border-radius: 5px;
-    background-color: rgba(204, 31, 161, 0.245);
+    background: linear-gradient(90deg,#00f2ff,#f17c9e);
+    border-radius: 15px;
 
   margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+  margin-bottom: 100px; /* Listing Devices başlığını bir miktar aşağı kaydır */
   color: white;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 
   
 
@@ -363,13 +350,16 @@ const logout = () => {
 .label1{
     width: 100%;
     height: 200px;
-    border-radius: 5px;
-    background-color: rgba(204, 31, 161, 0.522);
+    border-radius: 15px;
+    margin-top: 20px;
+    background: linear-gradient(90deg,#2bc1c8,#f17c9e);
+
 
     
     gap: 20px;
     font-size: 12px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
 
 }
@@ -377,6 +367,8 @@ const logout = () => {
     display: flex;
     gap: 20px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
+    margin-left: 10px;
 
 }
 .Problem{
@@ -384,6 +376,8 @@ const logout = () => {
     gap: 20px;
     cursor: pointer;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
+    margin-left: 10px;
 
 }
 
@@ -398,6 +392,7 @@ const logout = () => {
     border-radius: 40px;
     height: 40px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
     
     
 
@@ -414,6 +409,7 @@ const logout = () => {
     border-radius: 40px;
     height: 40px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
     
 
 
@@ -456,6 +452,7 @@ const logout = () => {
   margin-bottom: 10px;
   margin-left: 300px;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 
 }
 .kaydet1{
@@ -471,6 +468,7 @@ const logout = () => {
     height: 40px;
     font-family: "Roboto Flex", sans-serif;
     margin-top: -1%;
+    font-style: italic;
     
     
 
@@ -484,6 +482,7 @@ const logout = () => {
   font-size: 14px;
   
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 
 }
 
@@ -492,13 +491,15 @@ const logout = () => {
     margin-left: 50px;
     width: 100%;
     height: 500px;
-    border-radius: 5px;
-    background-color: rgba(31, 192, 204, 0.245);
+    border-radius: 15px;
+    background: linear-gradient(90deg,#00f2ff,#f17c9e);
+
 
   margin-right: 20px;
   margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
   color: white;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 
   
 
@@ -510,6 +511,7 @@ const logout = () => {
   gap: 30px;
   font-family: "Roboto Flex", sans-serif;
   margin-top: 5%;
+  font-style: italic;
 
 }
 .tarih1{
@@ -517,6 +519,7 @@ const logout = () => {
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 
 }
 .saat1{
@@ -524,6 +527,7 @@ const logout = () => {
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 
 }
 .islem1{
@@ -531,6 +535,7 @@ const logout = () => {
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 
 }
 .isim1{
@@ -538,12 +543,16 @@ const logout = () => {
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
+
 }
 .record1{
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
   font-size: 14px;
   color: #baf5d7;
+  font-style: italic;
+
 }
 .down-order{
   margin-top: 100px;
@@ -551,6 +560,7 @@ const logout = () => {
 }
 .label1{
   width: 50%;
+  border-radius: 15px;
 }
 .btndelete1{
   border: none;
@@ -566,6 +576,8 @@ const logout = () => {
     font-family: "Roboto Flex", sans-serif;
     margin-top: 5%;
     margin-left: 10%;
+    font-style: italic;
+
 
 
 }
@@ -574,6 +586,8 @@ const logout = () => {
   margin-top: 5%;
   display: flex;
   gap: 50px;
+  font-style: italic;
+
 }
 
 

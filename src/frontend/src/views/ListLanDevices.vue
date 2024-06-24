@@ -11,7 +11,7 @@
             <thead>
               <tr class="table-header">
                 <th>Local IP</th>
-                <th>Name</th>
+                <th>Device Name</th>
               </tr>
             </thead>
             <tbody>
@@ -27,28 +27,30 @@
   </div>
 </template>
 <script setup>
+import router from '@/router';
 import { onMounted, ref } from 'vue';
 
 // IP adreslerini tutacak ref değişkeni
 const localIPs = ref([]);
+let ws;
 
 const HandleConnection = () => {
-  const ws = new WebSocket("ws://localhost:5000");
+  const ws = new WebSocket("ws://172.16.0.229:5000");
   
   ws.onopen = function() {
-    console.log("Successfully connected...");
     ws.send("#INIT");
   };
   
-  ws.onmessage = function(event) { 
-    if (event.data === "#ALLOW"){
-      console.log(event.data);
-    } else if (event.data === "#DENY"){
+  ws.onmessage = function(event) {
+    if(event.data == "#ALLOW"){
+      //pass
+    }else if (event.data === "#DENY"){
+      localStorage.setItem('id',null);
+      localStorage.setItem('auth',false);
       router.push("/login");
     } else {
       let msg = JSON.parse(event.data);
       localStorage.setItem("msg", msg);
-      console.log(msg);
       localIPs.value = msg.map(item => ({ ip: item[0], name: item[1] }));
     }
     
@@ -59,33 +61,31 @@ const HandleConnection = () => {
     router.push('/');
   };
   
-  ws.onclose = function() {
-    console.log("WebSocket connection closed");
-  };
-  
+  ws.onclose = function(event){
+    ws.close();
+    localStorage.setItem('id',null);
+    localStorage.setItem('auth',false);
+    router.push("/login");
+  }
   return ws;
 };
 
 const sendMessage = (ws, message) => {
   if (ws.readyState === WebSocket.OPEN) {
     ws.send(message);
-    console.log(message, "is sent...");
   } else {
     ws.addEventListener('open', () => {
       ws.send(message);
-      console.log(message, "is sent...");
     }, { once: true });
   }
 };
-
-let ws;
 
 onMounted(()=>{
   try{
     ws = HandleConnection();
     sendMessage(ws,"#CHECK "+localStorage.id);
   } catch {
-    console.log("Error handled");
+    console.log("Error at onMounted");
   }
 });
 
@@ -129,8 +129,9 @@ const getLocalIPs = () => {
   width: 100%;
   height: 100%;
   border-radius: 5px;
-  background-color: rgba(204, 31, 161, 0.245);
-  margin: 20px 0;
+  background: linear-gradient(135deg,#63c8f4,#ff4fae);
+
+  margin: 20px 0; /* Yatay margin kaldırıldı */
   padding: 20px;
   border-radius: 15px;
 }
@@ -158,6 +159,10 @@ const getLocalIPs = () => {
 .Lp2 {
   font-size: 18px;
   color: white;
+  font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
 }
 
 .ip-table {
@@ -167,7 +172,11 @@ const getLocalIPs = () => {
 }
 
 .table-header {
-  background-color: #45abff;
+    background: linear-gradient(135deg,rgb(2, 124, 176),#ff4fae);
+    font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
+
   color: white;
   font-weight: bold;
 }

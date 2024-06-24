@@ -3,7 +3,7 @@
         <div class="Task-List-Vue">
       <h2>Task List<img src="/images/icon.png"></h2>
       <div class="row">
-        <input type="text" v-model="taskInput" placeholder="Yeni görev girin.">
+        <input class="t1" type="text" v-model="taskInput" placeholder="Yeni görev girin.">
         <button @click="addTask">Görev Ekle</button>
       </div>
       <ul class="task-list" id="list-container" @click="handleClick">
@@ -93,6 +93,9 @@
     padding: 40px 30px 70px;
     border-radius: 10px;
     margin-left: 100px;
+    font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
   
   }
   .h2{
@@ -100,9 +103,17 @@
     display: flex;
     align-items: center;
     margin-bottom: 20px;
-    font-family: sans-serif;
+    font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
   
   }
+  .t1{
+  font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
+  }
+
   .Task-List-Vue h2 img{
     width: 30px;
     margin-left: 10px;
@@ -134,6 +145,8 @@
     font-size: 16px;
     cursor: pointer;
     border-radius: 40px;
+    font-style: italic;
+    font-weight: bold;
   }
   .Task-List-Vue .task-list li {
     list-style: none;
@@ -143,6 +156,9 @@
     cursor: pointer;
     font-family: sans-serif;
     position: relative;
+    font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
 }
 
 .Task-List-Vue .task-list li::before {
