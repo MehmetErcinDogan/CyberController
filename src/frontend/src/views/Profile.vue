@@ -15,7 +15,7 @@
         <h1 class="position">Student</h1>
         <div class="label-acc">
           <div class="label-acc11">
-            <h1 class="logout-time">Time UTC: {{ currentTime }}</h1>
+            
             <h1 class="tcp-ipp">TCP IP</h1>
 
           </div>
@@ -47,28 +47,8 @@
             <button class="delete" @click="deleteItem">Delete</button>
           </div>
         </div>
-        <div class="Storage">
-          <h1 class="Storage1">Storage</h1>
-        </div>
-        <div class="menu">
-          <!-- Burda bir button var upload files adında bizim back-end de oluşturduğumuz storage kısmına burdan dosya yüklüyoruz. -->
-          <button class="btnpopup" @click="toggleUploadPopup">Upload Files</button>
-          <div class="modal" v-if="showUploadPopup">
-            <div class="modal-content">
-              <button class="close-btn" @click="closeUploadPopup">Close</button>
-              <input type="file" @change="handleFileUpload" multiple>
-              <ul>
-                <li v-for="file in fileList" :key="file.name">
-                  <span>{{ file.name }} - {{ formatSize(file.size) }}</span>
-                  <button @click="downloadFile(file)">Download</button>
-                  <span v-if="isImage(file)">
-                    <img :src="file.url" :alt="file.name" style="max-width: 100px;">
-                  </span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        
+        
       </div>
     </div>
     <div class="Order">
@@ -289,12 +269,12 @@ const logout = () => {
     width: 300px;
     height: 100px;
     border-radius: 5px;
-    background-color: rgba(204, 31, 161, 0.245);
+    
     font-family: "Roboto Flex", sans-serif;
 
 
   margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+  margin-bottom: 100px; /* Listing Devices başlığını bir miktar aşağı kaydır */
   display: flex;
 }
 .label-acc11{

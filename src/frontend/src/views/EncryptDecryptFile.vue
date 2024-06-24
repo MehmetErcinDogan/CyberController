@@ -78,6 +78,7 @@
     color: white;
     font-weight: bold;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
   }
   .file1{
@@ -85,6 +86,7 @@
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 
   }
   .method1{
@@ -92,6 +94,7 @@
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 
   }
   
@@ -102,6 +105,7 @@
     color: white;
     font-weight: bold;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
   }
   
@@ -113,6 +117,7 @@
     color: white;
     font-weight: bold;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
   }
   
@@ -137,6 +142,7 @@
     margin-left: 10%;
     font-family: "Roboto Flex", sans-serif;
     font-weight: bold;
+    font-style: italic;
 
 
 
@@ -157,6 +163,7 @@
     margin-left: 5%;
     font-family: "Roboto Flex", sans-serif;
     font-weight: bold;
+    font-style: italic;
 
 
 

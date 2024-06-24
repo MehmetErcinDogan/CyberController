@@ -9,6 +9,7 @@ import socket
 import json
 import time
 import sys
+import os
 
 # gonna complete the another script for scheduled tasks
 # gonna complete db
@@ -37,7 +38,8 @@ class Server:
             sys.exit()
 
     def run(self):
-        print(f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
+        print(
+            f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
         server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
@@ -48,7 +50,14 @@ class Server:
                     self._listClients()
                 elif command == "EXIT":
                     sys.exit()
-
+                elif command == "CLS":
+                    os.system("cls")
+                elif command == "KICK":
+                    try:
+                        ind = int(input("Index:"))
+                        self._clients.pop(ind)
+                    except Exception as e:
+                        print("Error at KICK as", e)
         except KeyboardInterrupt:
             print("Keyborad Interrupt")
             sys.exit()
@@ -71,7 +80,8 @@ class Server:
         print("[", end=" ")
 
         for i in self._clients:
-            print(i.id, end=" ")
+            print("Address:", i.ws.remote_address, end="\t")
+            print("ID:", i.id, end=" , ")
 
         print("]")
 
@@ -188,10 +198,13 @@ class Server:
         try:
             i = self._clientFindByWS(ws)
             while True:
-                tag, msg = Server._parser(await ws.recv())
-                if msg == "#LISTDEVICES":
-                    await ws.send(json.dumps([("192.168.1.1","ercin"),("192.168.1.2","can")]))
-                
+                if i not in self._clients:
+                    await ws.close()
+                    break
+                else:
+                    tag, msg = Server._parser(await ws.recv())
+                    if msg == "#LISTDEVICES":
+                        await ws.send(json.dumps([("192.168.1.1", "ercin"), ("192.168.1.2", "can")]))
 
         except Exception as e:
             print("Error occured at connectedClient as", e)

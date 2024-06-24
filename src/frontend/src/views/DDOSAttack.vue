@@ -82,12 +82,14 @@
   font-size: 20px;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 
 .ddos-components label {
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
   color: #ffffff;
+  font-style: italic;
 }
 
 .input-text, .input-time {
@@ -99,23 +101,27 @@
   border-radius: 5px;
   padding: 5px;
   margin-left: 10px;
+  font-style: italic;
 }
 .target-ip1{
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
+  
 }
 .time1{
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
+  font-style: italic;
 }
 
 .btnstart {
   margin-top: 20px;
-  margin-left: 10%;
+  margin-left: 80%;
   border: none;
   outline: none;
   padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
@@ -128,6 +134,7 @@
   height: 50px;
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
+  font-style: italic;
 }
 
 .progressbar-container {
@@ -140,6 +147,7 @@
   position: relative;
   font-weight: bold;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
 
 .progressbar {
@@ -180,6 +188,7 @@
   color: white;
   font-size: 20px;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
 }
   </style>
   

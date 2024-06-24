@@ -142,7 +142,7 @@ const scanDevices = () => {
   width: 33%;
   height: 100%;
   border-radius: 5px;
-  background-color: rgba(204, 31, 161, 0.245);
+  background-color: #63c8f4;
   
   align-items: center;
   justify-content: center;
@@ -156,7 +156,7 @@ const scanDevices = () => {
   width: 30%;
   height: 100%;
   border-collapse: collapse;
-  background-color: rgba(204, 31, 161, 0.245);
+  background-color: #63c8f4;
   border-radius: 15px;
   
   margin-right: 60%;
@@ -169,6 +169,9 @@ const scanDevices = () => {
   text-align: center;
   color: white;
   font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  
   
 }
 
@@ -187,17 +190,21 @@ const scanDevices = () => {
 
 h1 {
   font-size: 18px;
+  font-style: italic;
   color: white;
   font-family: "Roboto Flex", sans-serif;
+  font-weight: bold;
 }
 
 .l1 {
   font-size: 24px;
   margin-bottom: 5px; /* Listing Devices başlığına daha fazla boşluk eklemek için */
+  font-style: italic;
   color: white;
   font-family: "Roboto Flex", sans-serif;
   margin-left: 5%;
   color: #075df1;
+  font-weight: bold;
 }
 
 .l2 {
@@ -219,12 +226,15 @@ h1 {
   transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
   height: 50px;
   font-family: "Roboto Flex", sans-serif;
+  font-style: italic;
+  
 }
 
 .btn-search {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  font-style: italic;
   
   margin-left: 12%;
   border: none;
@@ -277,6 +287,7 @@ h1 {
   float: right;
   font-size: 28px;
   font-weight: bold;
+  font-style: italic;
 }
 
 .close:hover,

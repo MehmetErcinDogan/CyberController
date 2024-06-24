@@ -103,6 +103,9 @@
     font-weight: bold;
     color: white;
     margin-left: 10%;
+    font-style: italic;
+  
+  font-family: "Roboto Flex", sans-serif;
   }
   
   .data-table th, .data-table td {
@@ -136,6 +139,7 @@
     transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
     height: 50px;
     font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 
   }
   
