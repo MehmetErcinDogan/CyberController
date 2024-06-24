@@ -129,8 +129,13 @@ const getLocalIPs = () => {
   width: 100%;
   height: 100%;
   border-radius: 5px;
+<<<<<<< HEAD
   background-color: rgba(204, 31, 161, 0.245);
   margin: 20px 0;
+=======
+  background-color: #9e4a6c;
+  margin: 20px 0; /* Yatay margin kaldırıldı */
+>>>>>>> 35a721f (.)
   padding: 20px;
   border-radius: 15px;
 }

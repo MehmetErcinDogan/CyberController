@@ -44,6 +44,8 @@ class Server:
                 command = input("Command: ").strip().upper()
                 if command == "SHOW":
                     self._listClients()
+                elif command == "EXIT":
+                    sys.exit()
 
         except KeyboardInterrupt:
             print("Keyborad")
