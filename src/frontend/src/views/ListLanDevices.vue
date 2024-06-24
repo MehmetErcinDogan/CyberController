@@ -11,7 +11,7 @@
             <thead>
               <tr class="table-header">
                 <th>Local IP</th>
-                <th>Name</th>
+                <th>Device Name</th>
               </tr>
             </thead>
             <tbody>
@@ -33,7 +33,7 @@ import { onMounted, ref } from 'vue';
 const localIPs = ref([]);
 
 const HandleConnection = () => {
-  const ws = new WebSocket("ws://localhost:5000");
+  const ws = new WebSocket("ws://172.16.0.229:5000");
   
   ws.onopen = function() {
     console.log("Successfully connected...");
@@ -129,13 +129,9 @@ const getLocalIPs = () => {
   width: 100%;
   height: 100%;
   border-radius: 5px;
-<<<<<<< HEAD
-  background-color: rgba(204, 31, 161, 0.245);
-  margin: 20px 0;
-=======
-  background-color: #9e4a6c;
+  background: linear-gradient(135deg,#63c8f4,#1b4466);
+
   margin: 20px 0; /* Yatay margin kaldırıldı */
->>>>>>> 35a721f (.)
   padding: 20px;
   border-radius: 15px;
 }
@@ -172,7 +168,7 @@ const getLocalIPs = () => {
 }
 
 .table-header {
-  background-color: #45abff;
+  background-color: #ff5945;
   color: white;
   font-weight: bold;
 }

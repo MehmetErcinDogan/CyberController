@@ -31,7 +31,7 @@ const canvas = ref(null);
 const router = useRouter();
 
 const HandleConnection = () => {
-  const ws = new WebSocket("ws://localhost:5000");
+  const ws = new WebSocket("ws://172.16.0.229:5000");
   
   ws.onopen = function() {
     console.log("Successfully connected...");
