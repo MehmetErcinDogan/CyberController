@@ -38,6 +38,8 @@ class Server:
     def run(self):
         print(
             f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
+            # f"Server started to listening on localhost:\\",{self._port})
+        
         server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
@@ -65,6 +67,7 @@ class Server:
 
     async def _start_server(self):  # runs server
         serve = await websockets.serve(self._clientHandler, socket.gethostbyname(socket.gethostname()), self._port)
+        # serve = await websockets.serve(self._clientHandler, "localhost", self._port)
         await serve.wait_closed()
         # and when client connected adds one more client handler function for each client
 
@@ -204,6 +207,18 @@ class Server:
                     tag, msg = Server._parser(await ws.recv())
                     if msg == "#LISTDEVICES":
                         await ws.send(json.dumps([("192.168.1.1", "ercin"), ("192.168.1.2", "can")]))
+                    elif msg == "#GETPROFILE":
+                        result = [i.username,self._db.getUserInfos(i.username,i.password),self._db.getHistory(i.username,i.password),i.ws.remote_address]
+                        result = json.dumps(result)
+                        await ws.send(result)
+                    elif msg == "#CLEARHISTORY":
+                        self._db.clearHistory()
+                        await ws.send("#ALLOW")
+                    elif msg == "#EXIT":
+                        self._clientRemove(i)
+                        await ws.close()
+                        break
+
 
         except Exception as e:
             print("Error occured at connectedClient as", e)

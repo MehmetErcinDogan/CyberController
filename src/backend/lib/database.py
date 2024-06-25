@@ -97,5 +97,13 @@ class Database:
             print("Error at getHistory as", e)
             return False
 
+    def clearHistory(self):
+        try:
+            self._cursor.execute("DELETE FROM History")
+            self._connection.commit()
+        except Exception as e:
+            print("Error at getHistory as", e)
+            return False
+
     def __del__(self):
         self._connection.close()

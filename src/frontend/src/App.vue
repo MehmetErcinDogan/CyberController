@@ -33,10 +33,8 @@ const HandleConnection = () => {
     localStorage.setItem("msg", event.data);
   
     if (event.data === "#ALLOW") {
-      router.push('/');
+      router.push('/home');
     } else {
-      localStorage.setItem('id',null);
-      localStorage.setItem('auth',false);
       router.push('/login');
     }
   };
@@ -45,11 +43,7 @@ const HandleConnection = () => {
     console.log("WebSocket error: ", error);
     router.push('/login');
   };
-  
-  ws.onclose = function() {
-    router.push('/login');
-  };
-  
+    
   return ws;
 };
 
@@ -70,8 +64,6 @@ onMounted(() => {
     ws = HandleConnection();
   } catch {
     console.log("Error at connection");
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
     router.push('/login');
     return;
   }
@@ -79,8 +71,6 @@ onMounted(() => {
   // Oturum durumunu kontrol et
   const id = localStorage.getItem('id');
   if (!id) {
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
     router.push('/login');
     return;
   }

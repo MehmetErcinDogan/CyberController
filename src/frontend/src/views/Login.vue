@@ -47,20 +47,13 @@ const HandleConnection = () => {
       localStorage.setItem('auth',true);
       router.push('/home');
     } else {
-      localStorage.setItem('auth',false);
-      localStorage.setItem('id',null);
       router.push('/login');
     }
   };
   
   ws.onerror = function(error) {
     console.log("WebSocket error: ", error);
-    localStorage.setItem('auth',false);
-    localStorage.setItem('id',null);
     router.push('/login');
-  };
-  
-  ws.onclose = function() {
     location.reload();
   };
   
@@ -79,6 +72,7 @@ const sendMessage = (ws, message) => {
 
 onMounted(() => {
   localStorage.setItem('auth',false);
+  localStorage.setItem('id',false);
   try {
     ws = HandleConnection();
   } catch {
