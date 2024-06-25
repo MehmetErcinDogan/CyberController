@@ -269,12 +269,12 @@ const logout = () => {
 }
 .up-port{
     width: 100%;
-    height: 300px;
+    height: 500px;
     display: flex;
 }
 .label1{
     width: 100%;
-    height: 200px;
+    height: 300px;
     border-radius: 15px;
     margin-top: 20px;
     background: linear-gradient(90deg,#2bc1c8,#f17c9e);
@@ -285,10 +285,11 @@ const logout = () => {
 }
 .table-texts{
     display: flex;
-    gap: 20px;
+    gap: 50px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
     margin-left: 10px;
+    font-size: 10px;
 }
 .Problem{
     display: flex;
@@ -297,6 +298,7 @@ const logout = () => {
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
     margin-left: 10px;
+    font-size: 8px;
 }
 .clear, .delete{
     border: none;

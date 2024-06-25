@@ -86,7 +86,7 @@ class Server:
 
         for i in self._clients:
             print("Address:", i.ws.remote_address, end="\t")
-            print("ID:", i.id, end=" , ")
+            print("ID:", i.id, end=" ,\n")
 
         print("]")
 
@@ -225,9 +225,12 @@ class Server:
                         self._db.clearHistory()
                         await ws.send("#ALLOW")
                     elif msg == "#EXIT":
-                        self._clientRemove(i)
+                        self._clients.remove(i)
                         await ws.close()
                         break
-
+                    elif msg == "#GETTASK":
+                        result = json.dumps(self._db.getTasks())
+                        await ws.send(result)
+                    
         except Exception as e:
             print("Error occured at connectedClient as", e)

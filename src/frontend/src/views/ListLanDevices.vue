@@ -50,9 +50,10 @@ const HandleConnection = () => {
       router.push("/login");
     } else {
       let msg = JSON.parse(event.data);
-      localStorage.setItem("msg", msg);
+            localStorage.setItem("msg", JSON.stringify(msg));
+
       console.log(msg);
-      localIPs.value = msg.map(item => ({ ip: item[0], name: item[1] }));
+      localIPs.value = msg.map(item => ({ ip: item.ip, name: item.mac }));
     }
     
   };
