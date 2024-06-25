@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from lib.database import Database
-import threading
+import lib.features
 import websockets
+import threading
 import datetime
 import hashlib
 import asyncio
@@ -38,8 +39,8 @@ class Server:
     def run(self):
         print(
             f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
-            # f"Server started to listening on localhost:\\",{self._port})
-        
+        # f"Server started to listening on localhost:\\",{self._port})
+
         server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
@@ -52,6 +53,8 @@ class Server:
                     sys.exit()
                 elif command == "CLS":
                     os.system("cls")
+                    print(
+                        f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
                 elif command == "KICK":
                     try:
                         ind = int(input("Index:"))
@@ -91,6 +94,7 @@ class Server:
         for i in self._clients:
             if i.ws == ws:
                 self._clients.remove(i)
+                print("Clients removed")
                 return True
         return False
 
@@ -98,8 +102,8 @@ class Server:
     def _timeoutCheck(self):
         for client in self._clients:
             if ((client.recentTime - time.time()) > (10*60)):
-                client.ws.close()
                 self._clients.remove(client)
+                client.ws.close()
 
     def _parser(msg):  # parse messages
         try:
@@ -201,14 +205,20 @@ class Server:
             i = self._clientFindByWS(ws)
             while True:
                 if i not in self._clients:
+                    self._clientRemove()
                     await ws.close()
                     break
                 else:
                     tag, msg = Server._parser(await ws.recv())
                     if msg == "#LISTDEVICES":
-                        await ws.send(json.dumps([("192.168.1.1", "ercin"), ("192.168.1.2", "can")]))
+                        t = datetime.datetime.now()
+                        path = f'D:\\Repos\\CyberController\\data\\list_device_{t.year}_{t.month}_{t.day}_{t.hour}_{t.minute}_{t.second}_{t.microsecond}.dat'
+                        await ws.send(json.dumps(lib.features.scan_network(path)))
+                        id = self._db.getUserID(i.username,i.password)
+                        self._db.insertHistory("LISTDEVICE",path,id)
                     elif msg == "#GETPROFILE":
-                        result = [i.username,self._db.getUserInfos(i.username,i.password),self._db.getHistory(i.username,i.password),i.ws.remote_address]
+                        result = [i.username, self._db.getUserInfos(i.username, i.password), self._db.getHistory(
+                            i.username, i.password), i.ws.remote_address]
                         result = json.dumps(result)
                         await ws.send(result)
                     elif msg == "#CLEARHISTORY":
@@ -218,7 +228,6 @@ class Server:
                         self._clientRemove(i)
                         await ws.close()
                         break
-
 
         except Exception as e:
             print("Error occured at connectedClient as", e)

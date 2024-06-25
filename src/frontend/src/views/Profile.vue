@@ -11,7 +11,7 @@
         </div>
         <div class="label-acc">
           <div class="label-acc11">
-            <h1 class="tcp-ipp">{{ userInfo.tcpIp }}</h1>
+            <h1 class="tcp-ipp">{{ formatTcpIp(userInfo.tcpIp) }}</h1>
           </div>
           <button class="logout" @click="logout">Logout</button>
         </div>
@@ -26,9 +26,9 @@
               <h1 class="ProblemT">Problems</h1>
               <h1 class="ProblemT1">Names</h1>
             </div>
-            <div v-for="(item, index) in problems" :key="index" class="Problem" @click="selectProblem(index)">
-              <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item.problem }}</h1>
-              <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item.name }}</h1>
+            <div v-for="(item, index) in hist" :key="index" class="Problem" @click="selectProblem(index)">
+              <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item[1] }}</h1>
+              <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item[2] }}</h1>
             </div>
           </div>
           <div class="buttons">
@@ -64,8 +64,6 @@ const HandleConnection = () => {
     }else{
       let msg = JSON.parse(event.data);
       localStorage.setItem("msg", JSON.stringify(msg));
-
-      console.log(JSON.stringify(msg));
       //msg = 
       //[username,[1, 5428393492, 'Erçin adres', 'Mühendis', 'D:\\Repos\\CyberController\\src\\frontend\\public\\profile.png'],[1, 'D:\\Repos\\CyberController\\data\\history1.dat', 'history1', 1],ip]
       updateUserInfo(msg);
@@ -77,7 +75,7 @@ const HandleConnection = () => {
     console.log("WebSocket error: ", error);
     router.push("/");
   };
-
+  
   
   return ws;
 };
@@ -103,25 +101,7 @@ onMounted(()=>{
   }
 });
 
-// Bu fonksiyon order kısmında yeni kayıtları kaydedicek.
-
-
-
-
-
-
-
-
-
-
-
-//Problemlerin bulunduğu array
-const problems = ref([
-  { problem: 'Problem1', name: 'Name1' },
-  { problem: 'Problem2', name: 'Name2' },
-  { problem: 'Problem3', name: 'Name3' },
-  { problem: 'Problem4', name: 'Name4' },
-])
+const hist = ref()
 const userInfo = ref({
   photo: '/profile.png',
   details: [
@@ -132,18 +112,29 @@ const userInfo = ref({
   ],
   tcpIp: "TCP IP"
 });
+
 const updateUserInfo = (msg) => {
   const [username, userDetails, history, ip] = msg;
   userInfo.value = {
-    photo: userDetails[4], // Photo URL
+    // Assuming the photo URL needs to be correctly referenced from the public directory
+    photo: userDetails[0][4].replace('D:\\Repos\\CyberController\\src\\frontend\\public', ''), // Remove local path and use relative URL
     details: [
-      { label: "Name", value: userDetails[2] }, // Name
-      { label: "Position", value: userDetails[3] }, // Position or Address
-      { label: "ID", value: userDetails[1] }, // ID
-      { label: "Address", value: userDetails[3] } // Position (or modify as per correct label)
+      { label: "Name", value: username }, // Name from username
+      { label: "ID", value: userDetails[0][0] }, // ID
+      { label: "Phone", value: userDetails[0][1] }, // Phone number
+      { label: "Address", value: userDetails[0][2] }, // Address
+      { label: "Position", value: userDetails[0][3] } // Position
     ],
-    tcpIp: ip
+    tcpIp: ip // TCP/IP
   };
+
+  for(let i = 0;i<history.length;i++){
+    hist.push(history[i]);
+  }
+  
+};
+const formatTcpIp = (tcpIp) => {
+  return Array.isArray(tcpIp) ? `${tcpIp[0]}:${tcpIp[1]}` : tcpIp;
 };
 //Problemi seçmek için fonksiyon
 const selectedIndex = ref(null)
@@ -209,7 +200,7 @@ const logout = () => {
     margin-top: 100px;
     display: flex;
     gap: 20px;
-    font-size: 12px;
+    font-size: 10px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
 }
@@ -232,7 +223,7 @@ const logout = () => {
   gap: 10px;
 }
 .logout {
-    margin-left: 40%;
+    margin-left: 10%;
     border: none;
     outline: none;
     padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */

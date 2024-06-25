@@ -2,8 +2,7 @@ from lib.server import Server
 import pyuac
 import sys
 
-
-def main():
+def main():    
     sys.argv.pop(0)  # for removing source code file path
     # just port number can enter when application starting
     if len(sys.argv) <= 1:
@@ -24,9 +23,8 @@ def main():
 
 
 if __name__ == "__main__":
-    # if not pyuac.isUserAdmin():
-    #     print("Re-launching as admin!")
-    #     pyuac.runAsAdmin()
-    # else:
-    #     main()  # Already an admin here.
-    main()
+    if not pyuac.isUserAdmin():
+        print("Re-launching as admin!")
+        pyuac.runAsAdmin()
+    else:
+        main()  # Already an admin here.
