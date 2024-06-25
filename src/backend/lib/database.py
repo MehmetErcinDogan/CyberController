@@ -61,9 +61,22 @@ class Database:
             self._connection.commit()
             return True
         except Exception as e:
-            print("Error at inner task as", e)
+            print("Error at insert task as", e)
             return False
 
+    def deleteTask(self,title:str,desc:str,username:str,password:str):
+        try:
+            self._cursor.execute(
+                "SELECT id FROM Users WHERE username = ? AND password = ?", (username, password))
+            author_id = int(self._cursor.fetchall()[0][0])
+            
+            self._cursor.execute("DELETE FROM Tasks WHERE title = ? AND description = ? AND author_id = ?",(title,desc,author_id))
+            self._connection.commit()
+            return True
+        except Exception as e:
+            print("Error at delete task as",e)
+            return False
+        
     def getUserInfos(self, username: str, password: str):
         try:
             self._cursor.execute(

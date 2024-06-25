@@ -214,8 +214,8 @@ class Server:
                         t = datetime.datetime.now()
                         path = f'D:\\Repos\\CyberController\\data\\list_device_{t.year}_{t.month}_{t.day}_{t.hour}_{t.minute}_{t.second}_{t.microsecond}.dat'
                         await ws.send(json.dumps(lib.features.scan_network(path)))
-                        id = self._db.getUserID(i.username,i.password)
-                        self._db.insertHistory("LISTDEVICE",path,id)
+                        id = self._db.getUserID(i.username, i.password)
+                        self._db.insertHistory("LISTDEVICE", path, id)
                     elif msg == "#GETPROFILE":
                         result = [i.username, self._db.getUserInfos(i.username, i.password), self._db.getHistory(
                             i.username, i.password), i.ws.remote_address]
@@ -231,6 +231,16 @@ class Server:
                     elif msg == "#GETTASK":
                         result = json.dumps(self._db.getTasks())
                         await ws.send(result)
-                    
+                    elif msg == "#INSERTTASK":
+                        title = tag[1].strip()
+                        description = tag[2].strip()
+                        self._db.insertTask(
+                            title, description, i.username, i.password)
+                    elif msg == "#DELTASK":
+                        title = tag[1].strip()
+                        description = tag[2].strip()
+                        self._db.deleteTask(
+                            title, description, i.username, i.password)
+
         except Exception as e:
             print("Error occured at connectedClient as", e)

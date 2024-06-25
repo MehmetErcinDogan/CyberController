@@ -22,73 +22,87 @@
   </template>
   
   <script setup>
-  import { onMounted } from 'vue';
+  import { ref, onMounted } from 'vue';
+  
+  
+  const taskInput = ref('');
+  const tasks = ref([]);
+  
+  const addTask = () => {
+    if (taskInput.value === '') {
+      alert("Bir şey yazmalısın!");
+    } else {
+      tasks.value.push({ title: taskInput.value, checked: false });
+      taskInput.value = '';
+      saveData();
+  
+    }
+  };
+  
+  const removeTask = (index) => {
+    tasks.value.splice(index, 1);
+    saveData();
+  
+  };
+  
+  const handleClick = (e) => {
+    if (e.target.tagName === "LI") {
+      const index = Array.from(e.target.parentElement.children).indexOf(e.target);
+      tasks.value[index].checked = !tasks.value[index].checked;
+    } else if (e.target.tagName === "SPAN") {
+      const index = Array.from(e.target.parentElement.parentElement.children).indexOf(e.target.parentElement);
+      removeTask(index);
+    }
+  };
+    // Bu aşağıdaki 3 fonksiyonda değişiklikler yapmak lazım. Çünkü kaydedilen tasklar locale kaydediliyor.
+  const saveData = () => {
+    localStorage.setItem("tasks", JSON.stringify(tasks.value));
+  };
+  
+  const loadData = () => {
+    const storedTasks = localStorage.getItem("tasks");
+    if (storedTasks) {
+      tasks.value = JSON.parse(storedTasks);
+    }
+  };
+  
  
   let ws;
 
-const addTask = () => {
-  if (taskInput.value === '') {
-    alert("Bir şey yazmalısın!");
-    return;
-  }
-
-  const newTask = { title: taskInput.value, checked: false };
-  sendMessage({ type: "ADD_TASK", task: newTask });
-  taskInput.value = '';
-};
-
-const removeTask = (index) => {
-  sendMessage({ type: "REMOVE_TASK", index });
-};
-
-const handleClick = (e) => {
-  if (e.target.tagName === "LI") {
-    const index = Array.from(e.target.parentElement.children).indexOf(e.target);
-    tasks.value[index].checked = !tasks.value[index].checked;
-    sendMessage({ type: "TOGGLE_TASK", index });
-  } else if (e.target.tagName === "SPAN") {
-    const index = Array.from(e.target.parentElement.parentElement.children).indexOf(e.target.parentElement);
-    removeTask(index);
-  }
-};
-
-const HandleConnection = () => {
-  const ws = new WebSocket("ws://172.16.0.229:5000");
-  
-  ws.onopen = function() {
-    ws.send("#INIT");
-  };
-  
-  ws.onmessage = function(event) {
-    if(event.data == "#ALLOW"){
-      //pass
-    }else if (event.data === "#DENY"){
-      router.push("/login");
-    } else {
-      let msg = JSON.parse(event.data);
-      localStorage.setItem("msg", JSON.stringify(msg));
-      console.log(msg);
-      // gonna handle [[title,description],[title,description]]
-    }
+  const HandleConnection = () => {
+    const ws = new WebSocket("ws://172.16.0.229:5000");
     
-  };
+    ws.onopen = function() {
+      ws.send("#INIT");
+    };
+    
+    ws.onmessage = function(event) {
+      if(event.data == "#ALLOW"){
+        //pass
+      }else if (event.data === "#DENY"){
+        router.push("/login");
+      } else {
+        let msg = JSON.parse(event.data);
+        localStorage.setItem("msg", JSON.stringify(msg));
+        console.log(msg);
+      }
+      
+    };
 
-  ws.onerror = function(error) {
-    console.log("WebSocket error: ", error);
-    router.push('/');
-  };
+    ws.onerror = function(error) {
+      console.log("WebSocket error: ", error);
+      router.push('/');
+    };
 
-  return ws;
-};
+    return ws;
+  };
 
   const sendMessage = (ws, message) => {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(message);
-      console.log("sent: "+message);
     } else {
       ws.addEventListener('open', () => {
         ws.send(message);
-        console.log("sent: "+message);
       }, { once: true });
     }
   };
@@ -96,9 +110,9 @@ const HandleConnection = () => {
   onMounted(()=>{
     try{
       ws = HandleConnection();
-      sendMessage(ws,"#CHECK "+ localStorage.id);
+      sendMessage(ws,"#CHECK "+localStorage.id);
       sendMessage(ws,"#GETTASK");
-      console.log(ws);
+      loadData();
     } catch {
       console.log("Error at onMounted");
     }
