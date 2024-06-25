@@ -27,8 +27,8 @@
               <h1 class="ProblemT1">Names</h1>
             </div>
             <div v-for="(item, index) in hist" :key="index" class="Problem" @click="selectProblem(index)">
-              <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item[1] }}</h1>
-              <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item[2] }}</h1>
+    <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item[1] }}</h1>
+    <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item[2] }}</h1>
             </div>
           </div>
           <div class="buttons">
@@ -101,7 +101,8 @@ onMounted(()=>{
   }
 });
 
-const hist = ref()
+const hist = ref([]);
+
 const userInfo = ref({
   photo: '/profile.png',
   details: [
@@ -115,23 +116,22 @@ const userInfo = ref({
 
 const updateUserInfo = (msg) => {
   const [username, userDetails, history, ip] = msg;
+
+  // Update user info
   userInfo.value = {
-    // Assuming the photo URL needs to be correctly referenced from the public directory
-    photo: userDetails[0][4].replace('D:\\Repos\\CyberController\\src\\frontend\\public', ''), // Remove local path and use relative URL
+    photo: userDetails[0][4].replace('D:\\Repos\\CyberController\\src\\frontend\\public', ''),
     details: [
-      { label: "Name", value: username }, // Name from username
-      { label: "ID", value: userDetails[0][0] }, // ID
-      { label: "Phone", value: userDetails[0][1] }, // Phone number
-      { label: "Address", value: userDetails[0][2] }, // Address
-      { label: "Position", value: userDetails[0][3] } // Position
+      { label: "Name", value: username },
+      { label: "ID", value: userDetails[0][0] },
+      { label: "Phone", value: userDetails[0][1] },
+      { label: "Address", value: userDetails[0][2] },
+      { label: "Position", value: userDetails[0][3] }
     ],
-    tcpIp: ip // TCP/IP
+    tcpIp: ip
   };
 
-  for(let i = 0;i<history.length;i++){
-    hist.push(history[i]);
-  }
-  
+  // Update history
+  hist.value = history.map(item => [item[0], item[2], item[1]]); // Assuming item[0], item[1], item[2] correspond to your structure
 };
 const formatTcpIp = (tcpIp) => {
   return Array.isArray(tcpIp) ? `${tcpIp[0]}:${tcpIp[1]}` : tcpIp;
