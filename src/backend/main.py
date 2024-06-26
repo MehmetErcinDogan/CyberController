@@ -2,8 +2,8 @@ from lib.server import Server
 # import pyuac
 import sys
 
-def main():
-    sys.argv.pop(0) # for removing source code file path
+def main():    
+    sys.argv.pop(0)  # for removing source code file path
     # just port number can enter when application starting
     if len(sys.argv) <= 1:
         port = 5000  # default port number

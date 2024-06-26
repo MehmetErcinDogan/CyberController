@@ -23,9 +23,6 @@
 </template>
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-import { ref, onBeforeUnmount } from 'vue';
-
-import { useRouter } from 'vue-router';
 
 </script>
 

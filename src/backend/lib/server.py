@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 from lib.database import Database
-import threading
+import lib.features
 import websockets
+import threading
 import datetime
 import hashlib
 import asyncio
@@ -30,8 +31,6 @@ class Server:
         try:
             self._port = port
             self._clients = []
-            # self._db = Database("data")  # initialize or load database
-            self._db = Database()  # initialize or load database
 
         except Exception as e:
             print("Error occured during initialize server object as", e)
@@ -40,6 +39,8 @@ class Server:
     def run(self):
         print(
             f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
+        # f"Server started to listening on localhost:\\",{self._port})
+
         server_thread = threading.Thread(target=self._run_server, daemon=True)
         server_thread.start()
 
@@ -52,6 +53,8 @@ class Server:
                     sys.exit()
                 elif command == "CLS":
                     os.system("cls")
+                    print(
+                        f"Server started to listening on \"{socket.gethostbyname(socket.gethostname())}:{self._port}\"")
                 elif command == "KICK":
                     try:
                         ind = int(input("Index:"))
@@ -67,10 +70,12 @@ class Server:
 
     async def _start_server(self):  # runs server
         serve = await websockets.serve(self._clientHandler, socket.gethostbyname(socket.gethostname()), self._port)
+        # serve = await websockets.serve(self._clientHandler, "localhost", self._port)
         await serve.wait_closed()
         # and when client connected adds one more client handler function for each client
 
     def _run_server(self):
+        self._db = Database("data")  # initialize or load database
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop.run_until_complete(self._start_server())
@@ -81,7 +86,7 @@ class Server:
 
         for i in self._clients:
             print("Address:", i.ws.remote_address, end="\t")
-            print("ID:", i.id, end=" , ")
+            print("ID:", i.id, end=" ,\n")
 
         print("]")
 
@@ -89,6 +94,7 @@ class Server:
         for i in self._clients:
             if i.ws == ws:
                 self._clients.remove(i)
+                print("Clients removed")
                 return True
         return False
 
@@ -96,8 +102,8 @@ class Server:
     def _timeoutCheck(self):
         for client in self._clients:
             if ((client.recentTime - time.time()) > (10*60)):
-                client.ws.close()
                 self._clients.remove(client)
+                client.ws.close()
 
     def _parser(msg):  # parse messages
         try:
@@ -199,12 +205,42 @@ class Server:
             i = self._clientFindByWS(ws)
             while True:
                 if i not in self._clients:
+                    self._clientRemove()
                     await ws.close()
                     break
                 else:
                     tag, msg = Server._parser(await ws.recv())
                     if msg == "#LISTDEVICES":
-                        await ws.send(json.dumps([("192.168.1.1", "ercin"), ("192.168.1.2", "can")]))
+                        t = datetime.datetime.now()
+                        path = f'D:\\Repos\\CyberController\\data\\list_device_{t.year}_{t.month}_{t.day}_{t.hour}_{t.minute}_{t.second}_{t.microsecond}.dat'
+                        await ws.send(json.dumps(lib.features.scan_network(path)))
+                        id = self._db.getUserID(i.username, i.password)
+                        self._db.insertHistory("LISTDEVICE", path, id)
+                    elif msg == "#GETPROFILE":
+                        result = [i.username, self._db.getUserInfos(i.username, i.password), self._db.getHistory(
+                            i.username, i.password), i.ws.remote_address]
+                        result = json.dumps(result)
+                        await ws.send(result)
+                    elif msg == "#CLEARHISTORY":
+                        self._db.clearHistory()
+                        await ws.send("#ALLOW")
+                    elif msg == "#EXIT":
+                        self._clients.remove(i)
+                        await ws.close()
+                        break
+                    elif msg == "#GETTASK":
+                        result = json.dumps(self._db.getTasks())
+                        await ws.send(result)
+                    elif msg == "#INSERTTASK":
+                        title = tag[1].strip()
+                        description = tag[2].strip()
+                        self._db.insertTask(
+                            title, description, i.username, i.password)
+                    elif msg == "#DELTASK":
+                        title = tag[1].strip()
+                        description = tag[2].strip()
+                        self._db.deleteTask(
+                            title, description, i.username, i.password)
 
         except Exception as e:
             print("Error occured at connectedClient as", e)

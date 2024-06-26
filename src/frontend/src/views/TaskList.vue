@@ -66,9 +66,59 @@
     }
   };
   
-  onMounted(loadData);
-  
-  
+ 
+  let ws;
+
+  const HandleConnection = () => {
+    const ws = new WebSocket("ws://172.16.0.229:5000");
+    
+    ws.onopen = function() {
+      ws.send("#INIT");
+    };
+    
+    ws.onmessage = function(event) {
+      if(event.data == "#ALLOW"){
+        //pass
+      }else if (event.data === "#DENY"){
+        router.push("/login");
+      } else {
+        let msg = JSON.parse(event.data);
+        localStorage.setItem("msg", JSON.stringify(msg));
+        console.log(msg);
+      }
+      
+    };
+
+    ws.onerror = function(error) {
+      console.log("WebSocket error: ", error);
+      router.push('/');
+    };
+
+    return ws;
+  };
+
+  const sendMessage = (ws, message) => {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(message);
+    } else {
+      ws.addEventListener('open', () => {
+        ws.send(message);
+      }, { once: true });
+    }
+  };
+
+  onMounted(()=>{
+    try{
+      ws = HandleConnection();
+      sendMessage(ws,"#CHECK "+localStorage.id);
+      sendMessage(ws,"#GETTASK");
+      loadData();
+    } catch {
+      console.log("Error at onMounted");
+    }
+  });
+
+
   </script>
   <style scoped>
   *{

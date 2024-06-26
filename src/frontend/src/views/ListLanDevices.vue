@@ -2,6 +2,7 @@
   <div class="full-screen-container">
     <div class="up-container">
       <button class="btn1" @click="getLocalIPs">Button</button>
+      <h1 v-if="showMessage" class="lüt">Lütfen bekleyiniz</h1>
     </div>
     <div class="down-container">
       <div class="alt-label">
@@ -10,7 +11,7 @@
           <table class="ip-table">
             <thead>
               <tr class="table-header">
-                <th>Local IP</th>
+                <th>IP</th>
                 <th>Device Name</th>
               </tr>
             </thead>
@@ -32,6 +33,7 @@ import { onMounted, ref } from 'vue';
 
 // IP adreslerini tutacak ref değişkeni
 const localIPs = ref([]);
+const showMessage = ref(false);
 let ws;
 
 const HandleConnection = () => {
@@ -45,13 +47,13 @@ const HandleConnection = () => {
     if(event.data == "#ALLOW"){
       //pass
     }else if (event.data === "#DENY"){
-      localStorage.setItem('id',null);
-      localStorage.setItem('auth',false);
       router.push("/login");
     } else {
       let msg = JSON.parse(event.data);
-      localStorage.setItem("msg", msg);
-      localIPs.value = msg.map(item => ({ ip: item[0], name: item[1] }));
+            localStorage.setItem("msg", JSON.stringify(msg));
+
+      console.log(msg);
+      localIPs.value = msg.map(item => ({ ip: item.ip, name: item.mac }));
     }
     
   };
@@ -60,13 +62,7 @@ const HandleConnection = () => {
     console.log("WebSocket error: ", error);
     router.push('/');
   };
-  
-  ws.onclose = function(event){
-    ws.close();
-    localStorage.setItem('id',null);
-    localStorage.setItem('auth',false);
-    router.push("/login");
-  }
+
   return ws;
 };
 
@@ -92,7 +88,13 @@ onMounted(()=>{
 // IP adreslerini getiren fonksiyon
 const getLocalIPs = () => {
   try{
+    showMessage.value = true; // Show the message
+
     sendMessage(ws,"#LISTDEVICES ");
+    // Hide the message after 10 seconds
+    setTimeout(() => {
+      showMessage.value = false;
+    }, 10000);
   } catch {
     console.log("Error at getLocalIPs");
   }
@@ -108,6 +110,14 @@ const getLocalIPs = () => {
   justify-content: space-between;
   font-family: "Roboto Flex", sans-serif;
   overflow-x: hidden;
+}
+.lüt{
+  color: white;
+  font-size: 16px;
+  margin-left: 50px;
+  margin-top: 50px;
+  
+
 }
 
 .up-container {

@@ -1,32 +1,24 @@
 <template>
- <div class="container">
+  <div class="container">
     <div class="up-profile">
       <div class="profile-photo">
-        <img src="/profile.png" alt="Profile Photo">
+        <img :src="userInfo.photo" alt="Profile Photo">
       </div>
       <div class="other-profile-info">
-        <h1 class="name">Adı:</h1>
-        <h1 class="name">CANBERK</h1>
-        <h1 class="surname">Soyadı:</h1>
-        <h1 class="surname">ARMAN</h1>
-        <h1 class="account-id">ID:</h1>
-        <h1 class="account-id">11111</h1>
-        <h1 class="position">Position:</h1>
-        <h1 class="position">Student</h1>
+        <div v-for="(item, index) in userInfo.details" :key="index" class="profile-field">
+          <h1 class="label">{{ item.label }}:</h1>
+          <h1 class="value">{{ item.value }}</h1>
+        </div>
         <div class="label-acc">
           <div class="label-acc11">
-            
-            <h1 class="tcp-ipp">TCP IP</h1>
-
+            <h1 class="tcp-ipp">{{ formatTcpIp(userInfo.tcpIp) }}</h1>
           </div>
-          <!-- Bu buttona basıldığında logout olup tekrardan giriş ekranına gitmesi gerekiyor. Bunun için fonksiyonu yazılmalı. -->
           <button class="logout" @click="logout">Logout</button>
         </div>
       </div>
     </div>
     <div class="History">
       <h1 class="h1">History</h1>
-      <!-- Kullanıcının history kısmı  -->
       <div class="port-scanner-info">
         <div class="up-port">
           <div class="label1">
@@ -34,148 +26,116 @@
               <h1 class="ProblemT">Problems</h1>
               <h1 class="ProblemT1">Names</h1>
             </div>
-            <!-- Burdaki problemler kısmının içeriğini script kısmındaki problems arrayinden alıyor bunu jsondan almalı. -->
-            <div v-for="(item, index) in problems" :key="index" class="Problem" @click="selectProblem(index)">
-              <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item.problem }}</h1>
-              <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item.name }}</h1>
+            <div v-for="(item, index) in hist" :key="index" class="Problem" @click="selectProblem(index)">
+    <h1 :class="{'selected': selectedIndex === index}" class="Problems">{{ item[1] }}</h1>
+    <h1 :class="{'selected': selectedIndex === index}" class="Names">{{ item[2] }}</h1>
             </div>
           </div>
           <div class="buttons">
-            <!-- Kullanıcının problemleri silmesi ve temizlemesi için koyduğum buttonlar. -->
-            
             <button class="clear" @click="clearItems">Clear</button>
-            <button class="delete" @click="deleteItem">Delete</button>
+           
           </div>
         </div>
-        
-        
-      </div>
-    </div>
-    <div class="Order">
-      <h1 class="o1">Order</h1>
-      <h2>Menü</h2>
-      <div class="menu-components">
-        <!-- Burası order menüsü kısmı burda kullanıcı tarih,saat ve işlem seçicek. -->
-        <div>
-          <label class="tarih1" for="tarih">Tarih:</label>
-          <input class="tarih1"type="date" v-model="tarih" id="tarih">
-        </div>
-        <div>
-          <label class="saat1" for="saat">Saat:</label>
-          <input class="saat1"type="time" v-model="saat" id="saat">
-        </div>
-        <div>
-          <label class="islem1" for="islem">İşlem:</label>
-          <select class="islem1"v-model="islem" id="islem">
-            <option class="islem1" value="" disabled>İşlem seçin</option>
-            <option class="islem1" value="DDOS ATTACK">DDOS ATTACK</option>
-            <option class="islem1" value="SESSION ATTACK">SESSION ATTACK</option>
-          </select>
-        </div>
-        <div>
-          <label class="isim1"for="isim">İsim:</label>
-          <input class="isim1"type="text" v-model="isim" id="isim">
-        </div>
-        <!-- Bu kaydet buttonu ile işlem kaydedilecek. -->
-        <button class="kaydet1"@click="kaydet">Kaydet</button>
-      </div>
-      <div class="down-order">
-        <div class="label1">
-          <h1>İşlem Listesi</h1>
-          <ul>
-            <!-- Kaydedilen kayıtlar bu kısımda gösterilecek. -->
-            <li class="record1" v-for="(record, index) in kayitlar" :key="index" @click="selectKayit(index)">
-              <span :class="{'selected': selectedKayitIndex === index}">{{ record }}</span>
-            </li>
-          </ul>
-        </div>
-        <!-- Bu button sayesinde seçilen kayıtlar silinecek. -->
-        <button class="btndelete1" @click="sil">Sil</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const showUploadPopup = ref(false);
-const fileList = ref([]);
+import router from '@/router';
+import { onMounted, ref } from 'vue'
 
-const tarih = ref('');
-const saat = ref('');
-const islem = ref('');
-const isim = ref('');
-const sonuc = ref('');
+let ws;
 
-const kayitlar = ref([]);
-const selectedKayitIndex = ref(null);
+const HandleConnection = () => {
+  const ws = new WebSocket("ws://172.16.0.229:5000");
+  
+  ws.onopen = function() {
+    ws.send("#INIT");
+  };
+  
+  ws.onmessage = function(event) {
+    localStorage.setItem("msg", event.data);
+    let params = event.data.split(" ");
+    if (params[0] === "#ALLOW") {
+      //pass
+    } else if(params[0] === "#DENY"){
+      router.push('/login');
+    }else{
+      let msg = JSON.parse(event.data);
+      localStorage.setItem("msg", JSON.stringify(msg));
+      //msg = 
+      //[username,[1, 5428393492, 'Erçin adres', 'Mühendis', 'D:\\Repos\\CyberController\\src\\frontend\\public\\profile.png'],[1, 'D:\\Repos\\CyberController\\data\\history1.dat', 'history1', 1],ip]
+      updateUserInfo(msg);
 
-// Bu fonksiyon order kısmında yeni kayıtları kaydedicek.
-const kaydet = () => {
-  const yeniKayit = `Tarih: ${tarih.value}, Saat: ${saat.value}, İşlem: ${islem.value}, İsim: ${isim.value}`;
-  kayitlar.value.push(yeniKayit);
-  tarih.value = '';
-  saat.value = '';
-  islem.value = '';
-  isim.value = '';
-  selectedKayitIndex.value = null;  // Reset the selected index after saving a new record
+    }
+  };
+  
+  ws.onerror = function(error) {
+    console.log("WebSocket error: ", error);
+    router.push("/");
+  };
+  
+  
+  return ws;
 };
-//Bu fonksiyon ile kayıtlardan biri seçilebilecek.
-const selectKayit = (index) => {
-  selectedKayitIndex.value = index;
-};
-//Seçilen order silinecek.
-const sil = () => {
-  if (selectedKayitIndex.value !== null) {
-    kayitlar.value.splice(selectedKayitIndex.value, 1);
-    selectedKayitIndex.value = null;
+
+const sendMessage = (ws, message) => {
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(message);
+  } else {
+    ws.addEventListener('open', () => {
+      ws.send(message);
+    }, { once: true });
   }
 };
-//Pop-up menüyü açıyor.
-function toggleUploadPopup() {
-  showUploadPopup.value = !showUploadPopup.value;
-}
 
-function handleFileUpload(event) {
-  const files = event.target.files;
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const fileObject = {
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      url: URL.createObjectURL(file)
-    };
-    fileList.value.push(fileObject);
+onMounted(()=>{
+  try{
+    ws = HandleConnection();
+    sendMessage(ws,"#CHECK "+localStorage.id);
+    sendMessage(ws,"#GETPROFILE");
+  }catch(error){
+    console.log("Error at onmounted");
+    router.push("/");
   }
-}
+});
 
-function isImage(file) {
-  return file.type.startsWith('image');
-}
+const hist = ref([]);
 
-function downloadFile(file) {
-  // Dosya indirme işlemi burada gerçekleştirilebilir
-  console.log('Dosya indiriliyor:', file.name);
-}
+const userInfo = ref({
+  photo: '/profile.png',
+  details: [
+    { label: "Adı", value: "CANBERK" },
+    { label: "Soyadı", value: "ARMAN" },
+    { label: "ID", value: "11111" },
+    { label: "Position", value: "Student" }
+  ],
+  tcpIp: "TCP IP"
+});
 
-function formatSize(bytes) {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes === 0) return '0 Byte';
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-  return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-}
-//Dosya yüklemek için açılan pop-up menüyü kapatıyor.
-function closeUploadPopup() {
-  showUploadPopup.value = false;
-}
-//Problemlerin bulunduğu array
-const problems = ref([
-  { problem: 'Problem1', name: 'Name1' },
-  { problem: 'Problem2', name: 'Name2' },
-  { problem: 'Problem3', name: 'Name3' },
-  { problem: 'Problem4', name: 'Name4' },
-])
+const updateUserInfo = (msg) => {
+  const [username, userDetails, history, ip] = msg;
+
+  // Update user info
+  userInfo.value = {
+    photo: userDetails[0][4].replace('D:\\Repos\\CyberController\\src\\frontend\\public', ''),
+    details: [
+      { label: "Name", value: username },
+      { label: "ID", value: userDetails[0][0] },
+      { label: "Phone", value: userDetails[0][1] },
+      { label: "Address", value: userDetails[0][2] },
+      { label: "Position", value: userDetails[0][3] }
+    ],
+    tcpIp: ip
+  };
+
+  // Update history
+  hist.value = history.map(item => [item[0], item[2], item[1]]); // Assuming item[0], item[1], item[2] correspond to your structure
+};
+const formatTcpIp = (tcpIp) => {
+  return Array.isArray(tcpIp) ? `${tcpIp[0]}:${tcpIp[1]}` : tcpIp;
+};
 //Problemi seçmek için fonksiyon
 const selectedIndex = ref(null)
 const selectProblem = (index) => {
@@ -185,21 +145,17 @@ const selectProblem = (index) => {
 
 // Problemleri clear etmek için
 const clearItems = () => {
-  problems.value = []
-  selectedIndex.value = null
-
+  sendMessage(ws,"#CLEARHISTORY");
+  updateUserInfo();
+  return;
 }
 //Problemleri silmek için
-const deleteItem = () => {
-  if (selectedIndex.value !== null) {
-    problems.value.splice(selectedIndex.value, 1)
-    selectedIndex.value = null
-  } else {
-    alert('Please select a problem to delete.')
-  }
-}
+
 const logout = () => {
-  console.log('User logged out');
+  sendMessage(ws,"#EXIT");
+  localStorage.setItem("id",null);
+  localStorage.setItem("auth",false);
+  location.reload();
   return true;
 }
 
@@ -209,16 +165,10 @@ const logout = () => {
 <style scoped>
 
 .container{
-    
     width: 100%;
     height: 100%;
     overflow: scroll;
     font-family: "Roboto Flex", sans-serif;
-
-    
-    
-   
-    
 }
 .container::-webkit-scrollbar {
   width: 10px;
@@ -241,51 +191,39 @@ const logout = () => {
     display: flex;
     width: 100%;
     height: 30%;
-    
- 
- color: white;
- 
-    
+    color: white;
 }
 .profile-photo{
-    
     scale: 0.4;
-    
 }
 .other-profile-info{
     margin-top: 100px;
     display: flex;
     gap: 20px;
-    font-size: 12px;
+    font-size: 10px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
-
-
-    
-
-
 }
 .label-acc{
-    
     margin-left: 50px;
     width: 300px;
     height: 100px;
     border-radius: 5px;
-    
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
-
-
-  margin-right: 20px;
-   /* Listing Devices başlığını bir miktar aşağı kaydır */
-  display: flex;
+    margin-right: 20px;
+    display: flex;
 }
 .label-acc11{
   font-size: 10px;
   font-style: italic;
 }
+.profile-field {
+  display: flex;
+  gap: 10px;
+}
 .logout {
-    margin-left: 40%;
+    margin-left: 10%;
     border: none;
     outline: none;
     padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
@@ -298,14 +236,12 @@ const logout = () => {
     height: 30px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
-
 }
 
 .logout:hover {
     background: #a59290; /* Hover sırasında arka plan rengini değiştirin */
 }
 .btnpopup{
-  
     border: none;
     outline: none;
     padding: 8px 20px; /* Buton boyutunu küçültmek için padding'i azaltın */
@@ -317,59 +253,43 @@ const logout = () => {
     transition: background 0.3s ease; /* Hover efektini yumuşak hale getirin */
     height: 30px;
     font-family: "Roboto Flex", sans-serif;
-
-
 }
 .History{
     margin-left: 50px;
     width: 100%;
-    height: 500px;
+    height: 100%;
     border-radius: 5px;
     background: linear-gradient(90deg,#00f2ff,#f17c9e);
     border-radius: 15px;
-
-  margin-right: 20px;
-  margin-bottom: 100px; /* Listing Devices başlığını bir miktar aşağı kaydır */
-  color: white;
-  font-family: "Roboto Flex", sans-serif;
-  font-style: italic;
-
-  
-
-  
-
-
-  
+    margin-right: 20px;
+    margin-bottom: 100px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+    color: white;
+    font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 }
-
 .up-port{
     width: 100%;
-    height: 300px;
+    height: 500px;
     display: flex;
 }
 .label1{
     width: 100%;
-    height: 200px;
+    height: 300px;
     border-radius: 15px;
     margin-top: 20px;
     background: linear-gradient(90deg,#2bc1c8,#f17c9e);
-
-
-    
     gap: 20px;
     font-size: 12px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
-
-
 }
 .table-texts{
     display: flex;
-    gap: 20px;
+    gap: 50px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
     margin-left: 10px;
-
+    font-size: 10px;
 }
 .Problem{
     display: flex;
@@ -378,10 +298,9 @@ const logout = () => {
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
     margin-left: 10px;
-
+    font-size: 8px;
 }
-
-.clear{
+.clear, .delete{
     border: none;
     outline: none;
     padding: 16px 40px;
@@ -393,26 +312,6 @@ const logout = () => {
     height: 40px;
     font-family: "Roboto Flex", sans-serif;
     font-style: italic;
-    
-    
-
-}
-
-.delete{
-    border: none;
-    outline: none;
-    padding: 16px 40px;
-    background: #ff5945;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 40px;
-    height: 40px;
-    font-family: "Roboto Flex", sans-serif;
-    font-style: italic;
-    
-
-
 }
 .selected {
   background-color: rgba(65, 133, 65, 0.907);
@@ -436,9 +335,7 @@ const logout = () => {
   border-radius: 10px;
   width: 400px;
   max-height: 90%;
-  
   font-family: "Roboto Flex", sans-serif;
-
 }
 
 .close-btn {
@@ -453,58 +350,40 @@ const logout = () => {
   margin-left: 300px;
   font-family: "Roboto Flex", sans-serif;
   font-style: italic;
-
 }
 .kaydet1{
   border: none;
-  border: none;
-    outline: none;
-    padding: 16px 40px;
-    background: #ff5945;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 40px;
-    height: 40px;
-    font-family: "Roboto Flex", sans-serif;
-    margin-top: -1%;
-    font-style: italic;
-    
-    
-
+  outline: none;
+  padding: 16px 40px;
+  background: #ff5945;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 40px;
+  height: 40px;
+  font-family: "Roboto Flex", sans-serif;
+  margin-top: -1%;
+  font-style: italic;
 }
 .menu1 {
   margin-left: 35%;
   border-radius: 10px;
   background-color: black;
   color: white;
-  font-family: sans-serif;
-  font-size: 14px;
-  
   font-family: "Roboto Flex", sans-serif;
   font-style: italic;
-
 }
-
-
 .Order{
     margin-left: 50px;
     width: 100%;
     height: 500px;
     border-radius: 15px;
     background: linear-gradient(90deg,#00f2ff,#f17c9e);
-
-
-  margin-right: 20px;
-  margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
-  color: white;
-  font-family: "Roboto Flex", sans-serif;
-  font-style: italic;
-
-  
-
-  
-
+    margin-right: 20px;
+    margin-bottom: 10px; /* Listing Devices başlığını bir miktar aşağı kaydır */
+    color: white;
+    font-family: "Roboto Flex", sans-serif;
+    font-style: italic;
 }
 .menu-components{
   display: flex;
@@ -512,47 +391,16 @@ const logout = () => {
   font-family: "Roboto Flex", sans-serif;
   margin-top: 5%;
   font-style: italic;
-
 }
-.tarih1{
+.tarih1, .saat1, .islem1, .isim1, .record1 {
   font-family: "Roboto Flex", sans-serif;
   font-weight: bold;
   font-size: 14px;
   color: #b4049c;
   font-style: italic;
-
 }
-.saat1{
-  font-family: "Roboto Flex", sans-serif;
-  font-weight: bold;
-  font-size: 14px;
-  color: #b4049c;
-  font-style: italic;
-
-}
-.islem1{
-  font-family: "Roboto Flex", sans-serif;
-  font-weight: bold;
-  font-size: 14px;
-  color: #b4049c;
-  font-style: italic;
-
-}
-.isim1{
-  font-family: "Roboto Flex", sans-serif;
-  font-weight: bold;
-  font-size: 14px;
-  color: #b4049c;
-  font-style: italic;
-
-}
-.record1{
-  font-family: "Roboto Flex", sans-serif;
-  font-weight: bold;
-  font-size: 14px;
+.record1 {
   color: #baf5d7;
-  font-style: italic;
-
 }
 .down-order{
   margin-top: 100px;
@@ -564,22 +412,18 @@ const logout = () => {
 }
 .btndelete1{
   border: none;
-  border: none;
-    outline: none;
-    padding: 16px 40px;
-    background: #ff5945;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-    border-radius: 40px;
-    height: 40px;
-    font-family: "Roboto Flex", sans-serif;
-    margin-top: 5%;
-    margin-left: 10%;
-    font-style: italic;
-
-
-
+  outline: none;
+  padding: 16px 40px;
+  background: #ff5945;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 40px;
+  height: 40px;
+  font-family: "Roboto Flex", sans-serif;
+  margin-top: 5%;
+  margin-left: 10%;
+  font-style: italic;
 }
 .buttons{
   margin-left: 10%;
@@ -587,7 +431,64 @@ const logout = () => {
   display: flex;
   gap: 50px;
   font-style: italic;
+}
 
+@media (max-width: 768px) {
+  .up-profile {
+    flex-direction: column;
+    align-items: center;
+  }
+  .profile-photo {
+    scale: 0.6;
+  }
+  .other-profile-info {
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .logout {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  .History {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .label-acc {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .up-profile {
+    flex-direction: column;
+    align-items: center;
+  }
+  .profile-photo {
+    scale: 0.8;
+  }
+  .other-profile-info {
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .logout {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  .History {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .label-acc {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .clear, .delete {
+    padding: 8px 20px;
+    font-size: 16px;
+  }
 }
 
 
