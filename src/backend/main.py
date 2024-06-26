@@ -1,5 +1,5 @@
 from lib.server import Server
-import pyuac
+# import pyuac
 import sys
 
 def main():
@@ -23,9 +23,9 @@ def main():
 
 
 if __name__ == "__main__":
-    if not pyuac.isUserAdmin():
-        print("Re-launching as admin!")
-        pyuac.runAsAdmin()
-    else:        
-        main()  # Already an admin here.
-        
+    # if not pyuac.isUserAdmin():
+    #     print("Re-launching as admin!")
+    #     pyuac.runAsAdmin()
+    # else:        
+    #     main()  # Already an admin here.
+    main()
